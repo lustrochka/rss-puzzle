@@ -1,0 +1,19 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    text-align: center;
+}
+
+.login-form__button {
+    margin: 15px auto 0;
+    width: 150px;
+    height: 30px;
+    background-color: #f5b078;
+    border: none;
+    border-radius: 5px;
+}
+.login-form__label {
+    font-weight: 500;
+}
+   
