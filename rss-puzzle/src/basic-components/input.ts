@@ -7,6 +7,12 @@ class Input extends Component {
     this.addAttributes(attributes);
     if (onChange) this.setListener('input', onChange);
   }
+
+  getValue() {
+    const node = this.getNode();
+    if (node instanceof HTMLInputElement) return node.value;
+    return '';
+  }
 }
 
 export default Input;

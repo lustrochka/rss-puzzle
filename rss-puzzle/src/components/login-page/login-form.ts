@@ -20,20 +20,25 @@ class LoginForm extends Component {
 
   surnameMsg;
 
+  submitButton;
+
   constructor(onSubmit?: () => void) {
     super('form', 'login-form');
     this.nameMsg = span('login-form__message', '');
     this.surnameMsg = span('login-form__message', '');
+    this.submitButton = new Button('login-form__button', 'Login', { type: 'submit', disabled: 'true' }, onSubmit);
     this.nameInput = new Input(
       'login-form__input',
       {
         id: 'first-name',
         type: 'text',
+        name: 'name',
         required: 'true',
         pattern: '[A-Z]{1}[a-zA-Z\\-]{2,}',
       },
       () => {
-        this.nameMsg.changeText(checkValidity((this.nameInput.getNode() as HTMLInputElement).value, 3));
+        this.nameMsg.changeText(checkValidity(this.nameInput.getValue(), 3));
+        if (this.checkFormValidity()) this.submitButton.deleteAttribute('disabled');
       }
     );
     this.surnameInput = new Input(
@@ -41,11 +46,13 @@ class LoginForm extends Component {
       {
         id: 'first-name',
         type: 'text',
+        name: 'surname',
         required: 'true',
-        pattern: '[A-Z]{1}[a-zA-Z\\-]{2,}',
+        pattern: '[A-Z]{1}[a-zA-Z\\-]{3,}',
       },
       () => {
-        this.surnameMsg.changeText(checkValidity((this.surnameInput.getNode() as HTMLInputElement).value, 4));
+        this.surnameMsg.changeText(checkValidity(this.surnameInput.getValue(), 4));
+        if (this.checkFormValidity()) this.submitButton.deleteAttribute('disabled');
       }
     );
     super.appendChildren(
@@ -55,8 +62,14 @@ class LoginForm extends Component {
       new Label('login-form__label', 'Surname', { for: 'surname' }),
       this.surnameInput,
       this.surnameMsg,
-      new Button('login-form__button', 'Login', { type: 'submit', disabled: 'true' }, 'submit', onSubmit)
+      this.submitButton
     );
+  }
+
+  checkFormValidity() {
+    const node = this.getNode();
+    if (node instanceof HTMLFormElement) return node.checkValidity();
+    return false;
   }
 }
 

@@ -1,5 +1,5 @@
-import LoginForm from './components/login-page/login-form';
+import LoginPage from './components/login-page/login-page';
 import './styles.scss'; // eslint-disable-line
 
-const form = new LoginForm();
-document.querySelector('body')?.appendChild(form.getNode());
+const app = new LoginPage();
+document.querySelector('body')?.appendChild(app.getNode());

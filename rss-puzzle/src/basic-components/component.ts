@@ -27,6 +27,10 @@ class Component {
     Object.keys(attributes).forEach((el) => this.#node.setAttribute(el, attributes[el]));
   }
 
+  deleteAttribute(attribute: string) {
+    this.#node.removeAttribute(attribute);
+  }
+
   appendChildren(...children: Component[]) {
     children.forEach((child) => this.#node.append(child.getNode()));
   }
