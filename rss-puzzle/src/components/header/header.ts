@@ -4,7 +4,6 @@ import Button from '../../basic-components/button';
 class Header extends Component {
   constructor(onClick: () => void) {
     super('header', 'header');
-    console.log(localStorage.length);
     if (localStorage.length > 0) this.appendChildren(new Button('logout-button', 'Log out', {}, onClick));
   }
 }

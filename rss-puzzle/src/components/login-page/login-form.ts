@@ -26,7 +26,12 @@ class LoginForm extends Component {
     super('form', 'login-form');
     this.nameMsg = span('login-form__message', '');
     this.surnameMsg = span('login-form__message', '');
-    this.submitButton = new Button('login-form__button', 'Login', { type: 'button', disabled: 'true' }, onSubmit);
+    this.submitButton = new Button(
+      'login-form__button button',
+      'Login',
+      { type: 'button', disabled: 'true' },
+      onSubmit
+    );
     this.nameInput = new Input(
       'login-form__input',
       {
