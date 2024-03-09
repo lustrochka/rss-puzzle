@@ -22,11 +22,11 @@ class LoginForm extends Component {
 
   submitButton;
 
-  constructor(onSubmit?: () => void) {
+  constructor(onSubmit: () => void) {
     super('form', 'login-form');
     this.nameMsg = span('login-form__message', '');
     this.surnameMsg = span('login-form__message', '');
-    this.submitButton = new Button('login-form__button', 'Login', { type: 'submit', disabled: 'true' }, onSubmit);
+    this.submitButton = new Button('login-form__button', 'Login', { type: 'button', disabled: 'true' }, onSubmit);
     this.nameInput = new Input(
       'login-form__input',
       {
@@ -64,6 +64,7 @@ class LoginForm extends Component {
       this.surnameMsg,
       this.submitButton
     );
+    this.setListener('submit', (e: Event) => e.preventDefault());
   }
 
   checkFormValidity() {

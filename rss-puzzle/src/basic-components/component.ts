@@ -15,7 +15,7 @@ class Component {
     this.#node.classList.toggle(className);
   }
 
-  setListener(event: string, listener: () => void) {
+  setListener(event: string, listener: (arg: Event) => void) {
     this.#node.addEventListener(event, listener);
   }
 
