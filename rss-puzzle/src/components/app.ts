@@ -1,6 +1,7 @@
 import Component from '../basic-components/component';
 import LoginForm from './login-page/login-form';
 import Header from './header/header';
+import StartPage from './start-page/start-page';
 
 class App extends Component {
   constructor() {
@@ -25,7 +26,11 @@ class App extends Component {
       this.render();
     });
     this.appendChildren(header);
-    if (localStorage.length === 0) this.appendChildren(form);
+    if (localStorage.length === 0) {
+      this.appendChildren(form);
+    } else {
+      this.appendChildren(new StartPage());
+    }
   }
 }
 
