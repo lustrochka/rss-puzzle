@@ -21,13 +21,16 @@ class Game extends Component {
     this.randomize().forEach((word) => {
       const child = div('game__words__item');
       child.changeText(word);
-      child.setWidth(`${(700 / LETTERS_COUNT) * word.length}px`);
+      child.setStyle('width', `${(700 / LETTERS_COUNT) * word.length}px`);
       this.wordsBlock.appendChildren(child);
       child.setListener('click', () => {
-        child.getNode().style.transform = `translate(${-(child.getNode().offsetLeft - this.row.getNode().offsetWidth)}px, -500px)`;
+        child.setStyle(
+          'transform',
+          `translate(${-(child.getNode().offsetLeft - this.row.getNode().offsetWidth)}px, -500px)`
+        );
         setTimeout(() => {
-          child.getNode().style.transition = '0s';
-          child.getNode().style.transform = 'translate(0, 0)';
+          child.setStyle('transition', '0s');
+          child.setStyle('transform', 'translate(0, 0)');
           this.row.appendChildren(child);
         }, 500);
       });

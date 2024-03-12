@@ -11,7 +11,7 @@ function checkValidity(value: string, length: number) {
   return '';
 }
 
-class LoginForm extends Component {
+class LoginForm extends Component<HTMLFormElement> {
   nameInput;
 
   surnameInput;
@@ -73,9 +73,7 @@ class LoginForm extends Component {
   }
 
   checkFormValidity() {
-    const node = this.getNode();
-    if (node instanceof HTMLFormElement) return node.checkValidity();
-    return false;
+    return this.getNode().checkValidity();
   }
 }
 

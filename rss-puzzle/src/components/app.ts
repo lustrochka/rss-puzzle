@@ -23,12 +23,9 @@ class App extends Component {
   render() {
     this.getNode().innerHTML = '';
     const form = new LoginForm(() => {
-      const node = form.getNode();
-      if (node instanceof HTMLFormElement) {
-        const data = new FormData(node);
-        localStorage.setItem('name', String(data.get('name')));
-        localStorage.setItem('surname', String(data.get('surname')));
-      }
+      const data = new FormData(form.getNode());
+      localStorage.setItem('name', String(data.get('name')));
+      localStorage.setItem('surname', String(data.get('surname')));
       this.render();
     });
     const header = new Header(() => {

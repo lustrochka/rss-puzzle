@@ -1,7 +1,7 @@
 import Component from './component';
 import { Items } from '../types';
 
-class Input extends Component {
+class Input extends Component<HTMLInputElement> {
   constructor(className: string, attributes: Items, onChange?: () => void) {
     super('input', className);
     this.addAttributes(attributes);
@@ -9,9 +9,7 @@ class Input extends Component {
   }
 
   getValue() {
-    const node = this.getNode();
-    if (node instanceof HTMLInputElement) return node.value;
-    return '';
+    return this.getNode().value;
   }
 }
 

@@ -1,10 +1,10 @@
 import { Items } from '../types';
 
-class Component {
-  #node: HTMLElement;
+class Component<T extends HTMLElement = HTMLElement> {
+  #node: T;
 
   constructor(tag: string, className: string, ...children: Component[]) {
-    this.#node = document.createElement(tag);
+    this.#node = document.createElement(tag) as T;
     this.#node.className = className;
     if (children) {
       children.forEach((child) => this.#node.append(child.getNode()));
@@ -43,8 +43,8 @@ class Component {
     return this.#node;
   }
 
-  setWidth(value: string) {
-    this.#node.style.width = value;
+  setStyle(property: string, value: string) {
+    this.#node.style.setProperty(property, value);
   }
 }
 export default Component;
