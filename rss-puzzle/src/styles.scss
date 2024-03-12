@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .header {
   text-align: right;
 }
@@ -41,4 +45,26 @@
 .start-page__greeting {
   font-size: 20px;
   font-style: italic;
+}
+
+.game__field {
+  height: 500px;
+}
+
+.game__field,
+.game__words {
+  background-color: grey;
+  width: 700px;
+  position: relative;
+}
+
+.game__words__item {
+  display: inline-block;
+  text-align: center;
+  border: 1px solid black;
+  transition: 0.5s;
+}
+
+.game__filed__row {
+  display: inline;
 }

@@ -42,5 +42,9 @@ class Component {
   getNode() {
     return this.#node;
   }
+
+  setWidth(value: string) {
+    this.#node.style.width = value;
+  }
 }
 export default Component;
