@@ -12,27 +12,22 @@ class Game extends Component {
 
   row;
 
+  wordsRow;
+
   constructor() {
     super('div', 'game-page');
-    this.row = div('game__filed__row');
+    this.row = div('game__field__row');
+    this.wordsRow = div('game__words__row');
     this.field = div('game__field', this.row);
-    this.wordsBlock = div('game__words');
+    this.wordsBlock = div('game__words', this.wordsRow);
     this.appendChildren(this.field, this.wordsBlock);
     this.randomize().forEach((word) => {
       const child = div('game__words__item');
       child.changeText(word);
       child.setStyle('width', `${(700 / LETTERS_COUNT) * word.length}px`);
-      this.wordsBlock.appendChildren(child);
+      this.wordsRow.appendChildren(child);
       child.setListener('click', () => {
-        child.setStyle(
-          'transform',
-          `translate(${-(child.getNode().offsetLeft - this.row.getNode().offsetWidth)}px, -500px)`
-        );
-        setTimeout(() => {
-          child.setStyle('transition', '0s');
-          child.setStyle('transform', 'translate(0, 0)');
-          this.row.appendChildren(child);
-        }, 500);
+        this.moveWord(child);
       });
     });
   }
@@ -46,6 +41,28 @@ class Game extends Component {
       array.splice(index, 1);
     }
     return result;
+  }
+
+  moveWord(child: Component) {
+    let target: Component;
+    let height: number;
+    if (child.getNode().parentElement?.className === 'game__words__row') {
+      target = this.row;
+      height = -500;
+    } else {
+      target = this.wordsRow;
+      height = 500;
+    }
+    child.setStyle(
+      'transform',
+      `translate(${-(child.getNode().offsetLeft - target.getNode().offsetWidth)}px, ${height}px)`
+    );
+    setTimeout(() => {
+      child.setStyle('transition', '0s');
+      child.setStyle('transform', 'translate(0, 0)');
+      target.appendChildren(child);
+      child.setStyle('transition', '0.2s');
+    }, 200);
   }
 }
 

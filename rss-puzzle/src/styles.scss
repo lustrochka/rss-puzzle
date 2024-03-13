@@ -62,9 +62,10 @@
   display: inline-block;
   text-align: center;
   border: 1px solid black;
-  transition: 0.5s;
+  transition: 0.2s;
 }
 
-.game__filed__row {
+.game__words__row,
+.game__field__row {
   display: inline;
 }
