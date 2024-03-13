@@ -46,5 +46,9 @@ class Component<T extends HTMLElement = HTMLElement> {
   setStyle(property: string, value: string) {
     this.#node.style.setProperty(property, value);
   }
+
+  clear() {
+    this.#node.innerHTML = '';
+  }
 }
 export default Component;

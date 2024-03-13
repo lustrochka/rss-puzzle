@@ -16,12 +16,12 @@ class App extends Component {
   renderGame() {
     console.group(this);
     console.log(this.main);
-    this.main.getNode().innerHTML = '';
+    this.main.clear();
     this.main.appendChildren(new Game());
   }
 
   render() {
-    this.getNode().innerHTML = '';
+    this.clear();
     const form = new LoginForm(() => {
       const data = new FormData(form.getNode());
       localStorage.setItem('name', String(data.get('name')));

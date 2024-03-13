@@ -1,11 +1,14 @@
 import Component from '../../basic-components/component';
+import Card from './card';
+import Button from '../../basic-components/button';
 import { div } from '../../basic-components/tags';
 import data from '../../data/wordCollectionLevel1.json';
 
-const SENTENCE = data.rounds[0].words[0].textExample;
-const LETTERS_COUNT = SENTENCE.split(' ').join('').length;
-
 class Game extends Component {
+  round;
+
+  phraseCount;
+
   field;
 
   wordsBlock;
@@ -14,26 +17,25 @@ class Game extends Component {
 
   wordsRow;
 
+  indexesArray: number[];
+
+  sentence: string[];
+
   constructor() {
     super('div', 'game-page');
+    this.round = 0;
+    this.phraseCount = 0;
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
-    this.field = div('game__field', this.row);
+    this.field = div('game__field');
     this.wordsBlock = div('game__words', this.wordsRow);
     this.appendChildren(this.field, this.wordsBlock);
-    this.randomize().forEach((word) => {
-      const child = div('game__words__item');
-      child.changeText(word);
-      child.setStyle('width', `${(700 / LETTERS_COUNT) * word.length}px`);
-      this.wordsRow.appendChildren(child);
-      child.setListener('click', () => {
-        this.moveWord(child);
-      });
-    });
+    this.indexesArray = [];
+    this.sentence = [];
+    this.renderSentence();
   }
 
-  randomize() {
-    const array = SENTENCE.split(' ');
+  randomize(array: Card[]) {
     const result = [];
     while (array.length > 0) {
       const index = Math.floor(Math.random() * array.length);
@@ -43,15 +45,17 @@ class Game extends Component {
     return result;
   }
 
-  moveWord(child: Component) {
+  moveWord(child: Card) {
     let target: Component;
     let height: number;
     if (child.getNode().parentElement?.className === 'game__words__row') {
       target = this.row;
-      height = -500;
+      height = -500 + this.row.getNode().offsetTop;
+      this.indexesArray.push(child.getIndex());
     } else {
       target = this.wordsRow;
-      height = 500;
+      height = 500 - this.row.getNode().offsetTop;
+      this.indexesArray.splice(this.indexesArray.indexOf(child.getIndex()), 1);
     }
     child.setStyle(
       'transform',
@@ -63,6 +67,38 @@ class Game extends Component {
       target.appendChildren(child);
       child.setStyle('transition', '0.2s');
     }, 200);
+    if (this.checkRow()) this.addContinueButton();
+  }
+
+  renderSentence() {
+    this.sentence = data.rounds[this.round].words[this.phraseCount].textExample.split(' ');
+    const lettersCount = this.sentence.join('').length;
+    this.row = div('game__field__row');
+    this.field.appendChildren(this.row);
+    const cardsArray: Card[] = [];
+    this.sentence.forEach((word, index) => {
+      const card: Card = new Card(index, word, lettersCount, () => this.moveWord(card));
+      cardsArray.push(card);
+    });
+    this.randomize(cardsArray).forEach((card) => {
+      this.wordsRow.appendChildren(card);
+    });
+  }
+
+  checkRow() {
+    return (
+      this.indexesArray.every((item, index) => item === index) && this.indexesArray.length === this.sentence.length
+    );
+  }
+
+  addContinueButton() {
+    const continueButton = new Button('button', 'Continue', { type: 'button' }, () => {
+      this.indexesArray = [];
+      this.phraseCount++;
+      this.renderSentence();
+      continueButton.destroy();
+    });
+    this.appendChildren(continueButton);
   }
 }
 

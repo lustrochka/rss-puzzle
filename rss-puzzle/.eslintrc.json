@@ -25,6 +25,7 @@
     "class-methods-use-this": "off",
     "prettier/prettier": "error",
     "no-param-reassign": 0,
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    "no-plusplus": 0
   }
 }
