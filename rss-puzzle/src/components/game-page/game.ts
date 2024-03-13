@@ -67,7 +67,9 @@ class Game extends Component {
       target.appendChildren(child);
       child.setStyle('transition', '0.2s');
     }, 200);
-    if (this.checkRow()) this.addContinueButton();
+    for (let i = 0; i < this.row.getNode().children.length; i++)
+      this.row.getNode().children[i].classList.remove('incorrect');
+    this.checkRow();
   }
 
   renderSentence() {
@@ -86,9 +88,12 @@ class Game extends Component {
   }
 
   checkRow() {
-    return (
-      this.indexesArray.every((item, index) => item === index) && this.indexesArray.length === this.sentence.length
-    );
+    if (this.indexesArray.length === this.sentence.length) {
+      this.addCheckButton();
+      if (this.indexesArray.every((item, index) => item === index)) {
+        this.addContinueButton();
+      }
+    }
   }
 
   addContinueButton() {
@@ -99,6 +104,18 @@ class Game extends Component {
       continueButton.destroy();
     });
     this.appendChildren(continueButton);
+  }
+
+  addCheckButton() {
+    const checkButton = new Button('button', 'Check', { type: 'button' }, () => {
+      const checkArray = this.indexesArray.map((item, index) => item === index);
+      const cards = this.row.getNode().children;
+      for (let i = 0; i < cards.length; i++) {
+        if (!checkArray[i]) cards[i].classList.add('incorrect');
+      }
+      checkButton.destroy();
+    });
+    this.appendChildren(checkButton);
   }
 }
 
