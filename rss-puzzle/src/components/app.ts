@@ -14,8 +14,6 @@ class App extends Component {
   }
 
   renderGame() {
-    console.group(this);
-    console.log(this.main);
     this.main.clear();
     this.main.appendChildren(new Game());
   }

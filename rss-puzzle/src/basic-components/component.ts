@@ -15,8 +15,16 @@ class Component<T extends HTMLElement = HTMLElement> {
     this.#node.classList.toggle(className);
   }
 
+  removeClass(className: string) {
+    this.#node.classList.remove(className);
+  }
+
   setListener(event: string, listener: (arg: Event) => void) {
     this.#node.addEventListener(event, listener);
+  }
+
+  removeListener(event: string, listener: (arg: Event) => void) {
+    this.#node.removeEventListener(event, listener);
   }
 
   changeText(text: string) {

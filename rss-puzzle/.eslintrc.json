@@ -26,6 +26,7 @@
     "prettier/prettier": "error",
     "no-param-reassign": 0,
     "no-restricted-syntax": 0,
-    "no-plusplus": 0
+    "no-plusplus": 0,
+    "@typescript-eslint/no-unused-expressions": 0
   }
 }

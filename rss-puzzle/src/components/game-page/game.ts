@@ -21,6 +21,12 @@ class Game extends Component {
 
   sentence: string[];
 
+  button;
+
+  bindedContinueGame;
+
+  bindedCheckRow;
+
   constructor() {
     super('div', 'game-page');
     this.round = 0;
@@ -29,10 +35,13 @@ class Game extends Component {
     this.wordsRow = div('game__words__row');
     this.field = div('game__field');
     this.wordsBlock = div('game__words', this.wordsRow);
-    this.appendChildren(this.field, this.wordsBlock);
+    this.button = new Button('button hidden', 'Check', { type: 'button' });
+    this.appendChildren(this.field, this.wordsBlock, this.button);
     this.indexesArray = [];
     this.sentence = [];
     this.renderSentence();
+    this.bindedContinueGame = this.continueGame.bind(this);
+    this.bindedCheckRow = this.checkRow.bind(this);
   }
 
   randomize(array: Card[]) {
@@ -69,7 +78,7 @@ class Game extends Component {
     }, 200);
     for (let i = 0; i < this.row.getNode().children.length; i++)
       this.row.getNode().children[i].classList.remove('incorrect');
-    this.checkRow();
+    if (this.indexesArray.length === this.sentence.length) this.setButton();
   }
 
   renderSentence() {
@@ -87,35 +96,32 @@ class Game extends Component {
     });
   }
 
-  checkRow() {
-    if (this.indexesArray.length === this.sentence.length) {
-      this.addCheckButton();
-      if (this.indexesArray.every((item, index) => item === index)) {
-        this.addContinueButton();
-      }
+  setButton() {
+    this.button.removeClass('hidden');
+    if (this.indexesArray.every((item, index) => item === index)) {
+      this.button.changeText('Continue');
+      this.button.removeListener('click', this.bindedCheckRow);
+      this.button.setListener('click', this.bindedContinueGame);
+    } else {
+      this.button.changeText('Check');
+      this.button.removeListener('click', this.bindedContinueGame);
+      this.button.setListener('click', this.bindedCheckRow);
     }
   }
 
-  addContinueButton() {
-    const continueButton = new Button('button', 'Continue', { type: 'button' }, () => {
-      this.indexesArray = [];
-      this.phraseCount++;
-      this.renderSentence();
-      continueButton.destroy();
-    });
-    this.appendChildren(continueButton);
+  continueGame() {
+    this.indexesArray = [];
+    this.phraseCount++;
+    this.renderSentence();
+    this.button.toggleClass('hidden');
   }
 
-  addCheckButton() {
-    const checkButton = new Button('button', 'Check', { type: 'button' }, () => {
-      const checkArray = this.indexesArray.map((item, index) => item === index);
-      const cards = this.row.getNode().children;
-      for (let i = 0; i < cards.length; i++) {
-        if (!checkArray[i]) cards[i].classList.add('incorrect');
-      }
-      checkButton.destroy();
-    });
-    this.appendChildren(checkButton);
+  checkRow() {
+    const checkArray = this.indexesArray.map((item, index) => item === index);
+    const cards = this.row.getNode().children;
+    for (let i = 0; i < cards.length; i++) {
+      if (!checkArray[i]) cards[i].classList.add('incorrect');
+    }
   }
 }
 
