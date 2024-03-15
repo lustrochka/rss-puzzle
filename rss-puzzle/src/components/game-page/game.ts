@@ -1,22 +1,16 @@
 import Component from '../../basic-components/component';
 import Card from './card';
 import Button from '../../basic-components/button';
+import Hints, { BASE_URL } from './hints';
 import { div } from '../../basic-components/tags';
-import html from '../../data/sound';
 import data from '../../data/wordCollectionLevel1.json';
-
-const BASE_URL = 'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/';
 
 class Game extends Component {
   round;
 
   phraseCount;
 
-  hint;
-
-  isHintShown;
-
-  isAudioShown;
+  hints;
 
   field;
 
@@ -32,12 +26,6 @@ class Game extends Component {
 
   button;
 
-  hintButton;
-
-  audioButton;
-
-  audioHint;
-
   bindedContinueGame;
 
   bindedCheckRow;
@@ -46,26 +34,14 @@ class Game extends Component {
     super('div', 'game-page');
     this.round = 0;
     this.phraseCount = 0;
-    this.hint = div('game__text-hint__text');
-    this.isHintShown = false;
-    this.isAudioShown = false;
+    this.hints = new Hints();
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
     this.wordsRow.setStyle('height', `${530 / data.rounds[this.round].words.length}px`);
     this.field = div('game__field');
     this.wordsBlock = div('game__words', this.wordsRow);
     this.button = new Button('button hidden', 'Check', { type: 'button' });
-    this.hintButton = new Button('game__text-hint__button', 'Show translation', {}, () => this.toggleHint());
-    this.audioButton = new Button('game__audio-button', 'Show audio', {}, () => this.toggleAudio());
-    this.audioHint = this.renderPronuncHint();
-    this.appendChildren(
-      this.audioButton,
-      this.audioHint,
-      div('game__text-hint', this.hintButton, this.hint),
-      this.field,
-      this.wordsBlock,
-      this.button
-    );
+    this.appendChildren(this.hints, this.field, this.wordsBlock, this.button);
     this.indexesArray = [];
     this.sentence = [];
     this.renderSentence();
@@ -81,6 +57,16 @@ class Game extends Component {
       array.splice(index, 1);
     }
     return result;
+  }
+
+  setRound(round: number) {
+    this.round = round;
+    localStorage.setItem('round', `${this.round}`);
+  }
+
+  setPhraseCount(phraseCount: number) {
+    this.phraseCount = phraseCount;
+    localStorage.setItem('phraseCount', `${this.phraseCount}`);
   }
 
   moveWord(child: Card) {
@@ -133,47 +119,11 @@ class Game extends Component {
     });
   }
 
-  toggleHint() {
-    if (!this.isHintShown) {
-      this.hintButton.changeText('Hide translation');
-      this.hint.changeText(`${data.rounds[this.round].words[this.phraseCount].textExampleTranslate}`);
-    } else {
-      this.hintButton.changeText('Show translation');
-      this.hint.changeText('');
-    }
-    this.isHintShown = !this.isHintShown;
-  }
-
-  toggleAudio() {
-    if (!this.isAudioShown) {
-      this.audioButton.changeText('Hide audio');
-      this.audioHint.removeClass('hidden');
-    } else {
-      this.audioButton.changeText('Show audio');
-      this.audioHint.addClass('hidden');
-    }
-    this.isAudioShown = !this.isAudioShown;
-  }
-
-  renderPronuncHint() {
-    const hint = div('game__pronunc-hint hidden');
-    hint.getNode().innerHTML = html;
-    hint.setListener('click', () => {
-      hint.addClass('animated');
-      const audio = new Audio(`${BASE_URL}${data.rounds[this.round].words[this.phraseCount].audioExample}`);
-      audio.play();
-      audio.addEventListener('pause', () => {
-        hint.removeClass('animated');
-      });
-    });
-    return hint;
-  }
-
   setButton() {
     this.button.removeClass('hidden');
     if (this.indexesArray.every((item, index) => item === index)) {
-      this.toggleHint();
-      this.toggleAudio();
+      this.hints.toggleTextHint();
+      this.hints.toggleAudioHint();
       this.button.changeText('Continue');
       this.button.removeListener('click', this.bindedCheckRow);
       this.button.setListener('click', this.bindedContinueGame);
@@ -186,7 +136,7 @@ class Game extends Component {
 
   continueGame() {
     this.indexesArray = [];
-    this.phraseCount++;
+    this.setPhraseCount(++this.phraseCount);
     this.renderSentence();
     this.button.toggleClass('hidden');
   }
