@@ -13,6 +13,8 @@ class Game extends Component {
 
   hint;
 
+  isHintShown;
+
   field;
 
   wordsBlock;
@@ -27,6 +29,8 @@ class Game extends Component {
 
   button;
 
+  hintButton;
+
   bindedContinueGame;
 
   bindedCheckRow;
@@ -35,14 +39,16 @@ class Game extends Component {
     super('div', 'game-page');
     this.round = 0;
     this.phraseCount = 0;
-    this.hint = div('game__text-hint');
+    this.hint = div('game__text-hint__text');
+    this.isHintShown = false;
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
     this.wordsRow.setStyle('height', `${530 / data.rounds[this.round].words.length}px`);
     this.field = div('game__field');
     this.wordsBlock = div('game__words', this.wordsRow);
     this.button = new Button('button hidden', 'Check', { type: 'button' });
-    this.appendChildren(this.hint, this.field, this.wordsBlock, this.button);
+    this.hintButton = new Button('game__text-hint__button', 'Show translation', {}, () => this.toggleHint());
+    this.appendChildren(div('game__text-hint', this.hintButton, this.hint), this.field, this.wordsBlock, this.button);
     this.indexesArray = [];
     this.sentence = [];
     this.renderSentence();
@@ -89,7 +95,6 @@ class Game extends Component {
 
   renderSentence() {
     this.sentence = data.rounds[this.round].words[this.phraseCount].textExample.split(' ');
-    this.hint.changeText(`${data.rounds[this.round].words[this.phraseCount].textExampleTranslate}`);
     this.row = div('game__field__row');
     const height = 530 / data.rounds[this.round].words.length;
     this.field.appendChildren(this.row);
@@ -111,9 +116,22 @@ class Game extends Component {
     });
   }
 
+  toggleHint() {
+    console.log(this);
+    if (!this.isHintShown) {
+      this.hintButton.changeText('Hide translation');
+      this.hint.changeText(`${data.rounds[this.round].words[this.phraseCount].textExampleTranslate}`);
+    } else {
+      this.hintButton.changeText('Show translation');
+      this.hint.changeText('');
+    }
+    this.isHintShown = !this.isHintShown;
+  }
+
   setButton() {
     this.button.removeClass('hidden');
     if (this.indexesArray.every((item, index) => item === index)) {
+      this.toggleHint();
       this.button.changeText('Continue');
       this.button.removeListener('click', this.bindedCheckRow);
       this.button.setListener('click', this.bindedContinueGame);
