@@ -4,7 +4,7 @@ import Button from '../../basic-components/button';
 import { div } from '../../basic-components/tags';
 import data from '../../data/wordCollectionLevel1.json';
 
-const BASE_URL = 'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/';
+const BASE_URL = 'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/';
 
 class Game extends Component {
   round;
@@ -48,7 +48,13 @@ class Game extends Component {
     this.wordsBlock = div('game__words', this.wordsRow);
     this.button = new Button('button hidden', 'Check', { type: 'button' });
     this.hintButton = new Button('game__text-hint__button', 'Show translation', {}, () => this.toggleHint());
-    this.appendChildren(div('game__text-hint', this.hintButton, this.hint), this.field, this.wordsBlock, this.button);
+    this.appendChildren(
+      this.renderPronuncHint(),
+      div('game__text-hint', this.hintButton, this.hint),
+      this.field,
+      this.wordsBlock,
+      this.button
+    );
     this.indexesArray = [];
     this.sentence = [];
     this.renderSentence();
@@ -105,7 +111,7 @@ class Game extends Component {
         index,
         this.sentence,
         this.phraseCount,
-        BASE_URL + data.rounds[this.round].levelData.imageSrc,
+        `${BASE_URL}images/${data.rounds[this.round].levelData.imageSrc}`,
         height,
         () => this.moveWord(card)
       );
@@ -126,6 +132,16 @@ class Game extends Component {
       this.hint.changeText('');
     }
     this.isHintShown = !this.isHintShown;
+  }
+
+  renderPronuncHint() {
+    const hint = div('game__pronunc-hint');
+    hint.changeText('🔊');
+    hint.setListener('click', () => {
+      const audio = new Audio(`${BASE_URL}${data.rounds[this.round].words[this.phraseCount].audioExample}`);
+      audio.play();
+    });
+    return hint;
   }
 
   setButton() {
