@@ -16,6 +16,8 @@ class Game extends Component {
 
   isHintShown;
 
+  isAudioShown;
+
   field;
 
   wordsBlock;
@@ -32,6 +34,10 @@ class Game extends Component {
 
   hintButton;
 
+  audioButton;
+
+  audioHint;
+
   bindedContinueGame;
 
   bindedCheckRow;
@@ -42,6 +48,7 @@ class Game extends Component {
     this.phraseCount = 0;
     this.hint = div('game__text-hint__text');
     this.isHintShown = false;
+    this.isAudioShown = false;
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
     this.wordsRow.setStyle('height', `${530 / data.rounds[this.round].words.length}px`);
@@ -49,8 +56,11 @@ class Game extends Component {
     this.wordsBlock = div('game__words', this.wordsRow);
     this.button = new Button('button hidden', 'Check', { type: 'button' });
     this.hintButton = new Button('game__text-hint__button', 'Show translation', {}, () => this.toggleHint());
+    this.audioButton = new Button('game__audio-button', 'Show audio', {}, () => this.toggleAudio());
+    this.audioHint = this.renderPronuncHint();
     this.appendChildren(
-      this.renderPronuncHint(),
+      this.audioButton,
+      this.audioHint,
       div('game__text-hint', this.hintButton, this.hint),
       this.field,
       this.wordsBlock,
@@ -124,7 +134,6 @@ class Game extends Component {
   }
 
   toggleHint() {
-    console.log(this);
     if (!this.isHintShown) {
       this.hintButton.changeText('Hide translation');
       this.hint.changeText(`${data.rounds[this.round].words[this.phraseCount].textExampleTranslate}`);
@@ -135,8 +144,19 @@ class Game extends Component {
     this.isHintShown = !this.isHintShown;
   }
 
+  toggleAudio() {
+    if (!this.isAudioShown) {
+      this.audioButton.changeText('Hide audio');
+      this.audioHint.removeClass('hidden');
+    } else {
+      this.audioButton.changeText('Show audio');
+      this.audioHint.addClass('hidden');
+    }
+    this.isAudioShown = !this.isAudioShown;
+  }
+
   renderPronuncHint() {
-    const hint = div('game__pronunc-hint');
+    const hint = div('game__pronunc-hint hidden');
     hint.getNode().innerHTML = html;
     hint.setListener('click', () => {
       hint.addClass('animated');
@@ -153,6 +173,7 @@ class Game extends Component {
     this.button.removeClass('hidden');
     if (this.indexesArray.every((item, index) => item === index)) {
       this.toggleHint();
+      this.toggleAudio();
       this.button.changeText('Continue');
       this.button.removeListener('click', this.bindedCheckRow);
       this.button.setListener('click', this.bindedContinueGame);
