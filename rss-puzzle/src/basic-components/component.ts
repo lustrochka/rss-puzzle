@@ -11,6 +11,10 @@ class Component<T extends HTMLElement = HTMLElement> {
     }
   }
 
+  addClass(className: string) {
+    this.#node.classList.add(className);
+  }
+
   toggleClass(className: string) {
     this.#node.classList.toggle(className);
   }

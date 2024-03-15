@@ -2,6 +2,7 @@ import Component from '../../basic-components/component';
 import Card from './card';
 import Button from '../../basic-components/button';
 import { div } from '../../basic-components/tags';
+import html from '../../data/sound';
 import data from '../../data/wordCollectionLevel1.json';
 
 const BASE_URL = 'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/';
@@ -136,10 +137,14 @@ class Game extends Component {
 
   renderPronuncHint() {
     const hint = div('game__pronunc-hint');
-    hint.changeText('🔊');
+    hint.getNode().innerHTML = html;
     hint.setListener('click', () => {
+      hint.addClass('animated');
       const audio = new Audio(`${BASE_URL}${data.rounds[this.round].words[this.phraseCount].audioExample}`);
       audio.play();
+      audio.addEventListener('pause', () => {
+        hint.removeClass('animated');
+      });
     });
     return hint;
   }

@@ -2,6 +2,42 @@
   box-sizing: border-box;
 }
 
+@keyframes first-wave {
+  0% {
+    visibility: hidden;
+  }
+  20% {
+    visibility: hidden;
+  }
+  21% {
+    visibility: visible;
+  }
+}
+
+@keyframes second-wave {
+  0% {
+    visibility: hidden;
+  }
+  45% {
+    visibility: hidden;
+  }
+  46% {
+    visibility: visible;
+  }
+}
+
+@keyframes third-wave {
+  0% {
+    visibility: hidden;
+  }
+  70% {
+    visibility: hidden;
+  }
+  71% {
+    visibility: visible;
+  }
+}
+
 .header {
   text-align: right;
 }
@@ -94,4 +130,24 @@
 
 .game__text-hint {
   text-align: center;
+}
+
+#wave1,
+#wave2,
+#wave3 {
+  visibility: hidden;
+}
+
+.animated {
+  svg {
+    #wave1 {
+      animation: first-wave linear 1.5s infinite;
+    }
+    #wave2 {
+      animation: second-wave linear 1.5s infinite;
+    }
+    #wave3 {
+      animation: third-wave linear 1.5s infinite;
+    }
+  }
 }
