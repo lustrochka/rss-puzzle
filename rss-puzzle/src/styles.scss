@@ -48,7 +48,7 @@
 }
 
 .game__field {
-  height: 500px;
+  height: 525px;
 }
 
 .game__field,
@@ -59,15 +59,29 @@
 }
 
 .game__words__item {
+  position: relative;
   display: inline-block;
   text-align: center;
-  border: 1px solid black;
   transition: 0.2s;
+  height: inherit;
+  div {
+    height: 100%;
+  }
+  div:first-child {
+    mask-image: radial-gradient(circle at left, transparent 10px, black 10px);
+  }
+  div:nth-child(2) {
+    position: absolute;
+    top: 0;
+    right: -20px;
+    width: 20px;
+    mask-image: radial-gradient(circle at left, black 10px, transparent 10px);
+  }
 }
 
 .game__words__row,
 .game__field__row {
-  display: inline;
+  display: inline-block;
 }
 
 .incorrect {

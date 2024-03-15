@@ -4,6 +4,8 @@ import Button from '../../basic-components/button';
 import { div } from '../../basic-components/tags';
 import data from '../../data/wordCollectionLevel1.json';
 
+const BASE_URL = 'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/images/';
+
 class Game extends Component {
   round;
 
@@ -33,6 +35,7 @@ class Game extends Component {
     this.phraseCount = 0;
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
+    this.wordsRow.setStyle('height', `${530 / data.rounds[this.round].words.length}px`);
     this.field = div('game__field');
     this.wordsBlock = div('game__words', this.wordsRow);
     this.button = new Button('button hidden', 'Check', { type: 'button' });
@@ -83,12 +86,20 @@ class Game extends Component {
 
   renderSentence() {
     this.sentence = data.rounds[this.round].words[this.phraseCount].textExample.split(' ');
-    const lettersCount = this.sentence.join('').length;
     this.row = div('game__field__row');
+    const height = 530 / data.rounds[this.round].words.length;
     this.field.appendChildren(this.row);
+    this.row.setStyle('height', `${height}px`);
     const cardsArray: Card[] = [];
     this.sentence.forEach((word, index) => {
-      const card: Card = new Card(index, word, lettersCount, () => this.moveWord(card));
+      const card: Card = new Card(
+        index,
+        this.sentence,
+        this.phraseCount,
+        BASE_URL + data.rounds[this.round].levelData.imageSrc,
+        height,
+        () => this.moveWord(card)
+      );
       cardsArray.push(card);
     });
     this.randomize(cardsArray).forEach((card) => {
