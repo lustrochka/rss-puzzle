@@ -21,12 +21,16 @@ class Hints extends Component {
 
   constructor() {
     super('div', 'hints');
-    this.#isTextHintShown = false;
-    this.#isAudioHintShown = false;
-    this.#textHintButton = new Button('hints__text-hint-button', 'Show translation', {}, () => this.toggleTextHint());
-    this.#audioHintButton = new Button('hints__audio-hint-button', 'Show audio', {}, () => this.toggleAudioHint());
+    this.#isTextHintShown = true;
+    if (localStorage.getItem('text-hint')) this.#isTextHintShown = localStorage.getItem('text-hint') === 'true';
+    this.#isAudioHintShown = true;
+    if (localStorage.getItem('audio-hint')) this.#isAudioHintShown = localStorage.getItem('audio-hint') === 'true';
+    this.#textHintButton = new Button('hints__text-hint-button', 'Hide translation', {}, () => this.toggleTextHint());
+    this.#audioHintButton = new Button('hints__audio-hint-button', 'Hide audio', {}, () => this.toggleAudioHint());
     this.#textHint = div('hints__text-hint');
-    this.#audioHint = this.renderTextHint();
+    this.#audioHint = this.renderAudioHint();
+    this.toggleAudioHint(false);
+    this.toggleTextHint(false);
     this.appendChildren(this.#audioHintButton, this.#audioHint, this.#textHintButton, this.#textHint);
   }
 
@@ -38,8 +42,8 @@ class Hints extends Component {
     return Number(localStorage.getItem('phraseCount')) || 0;
   }
 
-  renderTextHint() {
-    const hint = div('hints__audio-hint hidden');
+  renderAudioHint() {
+    const hint = div('hints__audio-hint');
     hint.getNode().innerHTML = svg;
     hint.setListener('click', () => {
       hint.addClass('animated');
@@ -52,26 +56,28 @@ class Hints extends Component {
     return hint;
   }
 
-  toggleTextHint() {
-    if (!this.#isTextHintShown) {
+  toggleTextHint(change = true) {
+    if (change) this.#isTextHintShown = !this.#isTextHintShown;
+    if (this.#isTextHintShown) {
       this.#textHintButton.changeText('Hide translation');
       this.#textHint.changeText(`${data.rounds[this.getRound()].words[this.getPhraseCount()].textExampleTranslate}`);
     } else {
       this.#textHintButton.changeText('Show translation');
       this.#textHint.changeText('');
     }
-    this.#isTextHintShown = !this.#isTextHintShown;
+    localStorage.setItem('text-hint', `${this.#isTextHintShown}`);
   }
 
-  toggleAudioHint() {
-    if (!this.#isAudioHintShown) {
+  toggleAudioHint(change = true) {
+    if (change) this.#isAudioHintShown = !this.#isAudioHintShown;
+    if (this.#isAudioHintShown) {
       this.#audioHintButton.changeText('Hide audio');
       this.#audioHint.removeClass('hidden');
     } else {
       this.#audioHintButton.changeText('Show audio');
       this.#audioHint.addClass('hidden');
     }
-    this.#isAudioHintShown = !this.#isAudioHintShown;
+    localStorage.setItem('audio-hint', `${this.#isAudioHintShown}`);
   }
 }
 
