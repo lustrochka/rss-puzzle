@@ -1,5 +1,5 @@
 import Component from '../../basic-components/component';
-import { div, h3, span } from '../../basic-components/tags';
+import { div, h3, span, img, p } from '../../basic-components/tags';
 import data from '../../data/data';
 import { BASE_URL } from '../game-page/hints';
 
@@ -12,6 +12,7 @@ class Results extends Component {
   render() {
     const level = Number(localStorage.getItem('level')) || 1;
     const round = Number(localStorage.getItem('round')) || 0;
+    const imgData = data[level].rounds[round].levelData;
     const autocompletedIndexes = JSON.parse(localStorage.getItem('autocompleted') || '[]');
     const unknownBlock = div('results__block', h3('results__block__title', "I don't know"));
     const knownBlock = div('results__block', h3('results__block__title', 'I know'));
@@ -31,7 +32,12 @@ class Results extends Component {
         knownBlock.appendChildren(phraseDiv);
       }
     });
-    this.appendChildren(unknownBlock, knownBlock);
+    this.appendChildren(
+      img('results__image', `${BASE_URL}images/${data[level].rounds[round].levelData.cutSrc}`),
+      p('results__info', `${imgData.author} - ${imgData.name} (${imgData.year})`),
+      unknownBlock,
+      knownBlock
+    );
   }
 }
 
