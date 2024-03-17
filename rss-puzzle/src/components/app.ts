@@ -3,6 +3,7 @@ import LoginForm from './login-page/login-form';
 import Header from './header/header';
 import StartPage from './start-page/start-page';
 import Game from './game-page/game';
+import Results from './results/results';
 
 class App extends Component {
   main = new Component('main', 'main');
@@ -15,7 +16,12 @@ class App extends Component {
 
   renderGame() {
     this.main.clear();
-    this.main.appendChildren(new Game());
+    this.main.appendChildren(new Game(() => this.renderResults()));
+  }
+
+  renderResults() {
+    this.main.clear();
+    this.main.appendChildren(new Results());
   }
 
   render() {

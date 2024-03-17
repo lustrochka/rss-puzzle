@@ -33,11 +33,13 @@ class Game extends Component {
 
   button;
 
+  resultButton;
+
   bindedContinueGame;
 
   bindedCheckRow;
 
-  constructor() {
+  constructor(onClickResults: () => void) {
     super('div', 'game-page');
     this.level = 1;
     this.round = 0;
@@ -53,6 +55,7 @@ class Game extends Component {
     this.information = div('game__info hidden');
     this.wordsBlock = div('game__words');
     this.button = new Button('button hidden', 'Check', { type: 'button' });
+    this.resultButton = new Button('button hidden', 'Results', { type: 'button' }, onClickResults);
     this.indexesArray = [];
     this.sentence = [];
     this.bindedContinueGame = this.continueGame.bind(this);
@@ -79,11 +82,9 @@ class Game extends Component {
       this.wordsBlock,
       this.button,
       new Button('button autocomplete-button', "I don't know", { type: 'button' }, () => {
-        this.row.getNode().remove();
-        this.renderSentence(false);
-        this.wordsRow.clear();
-        this.changeToCintinueButton();
-      })
+        this.showRightOrder();
+      }),
+      this.resultButton
     );
     this.renderSentence();
   }
@@ -106,6 +107,11 @@ class Game extends Component {
   setPhraseCount(phraseCount: number) {
     this.phraseCount = phraseCount;
     localStorage.setItem('phraseCount', `${this.phraseCount}`);
+  }
+
+  setLevel(level: number) {
+    this.level = level;
+    localStorage.setItem('level', `${this.level}`);
   }
 
   moveWord(child: Card) {
@@ -166,7 +172,7 @@ class Game extends Component {
 
   setButton() {
     if (this.indexesArray.every((item, index) => item === index)) {
-      this.changeToCintinueButton();
+      this.changeToContinueButton();
     } else {
       this.button.removeClass('hidden');
       this.button.changeText('Check');
@@ -175,7 +181,16 @@ class Game extends Component {
     }
   }
 
-  changeToCintinueButton() {
+  showRightOrder() {
+    this.row.getNode().remove();
+    this.renderSentence(false);
+    this.wordsRow.clear();
+    this.changeToContinueButton();
+    const autocompleted = JSON.parse(localStorage.getItem('autocompleted') || '[]');
+    JSON.stringify(autocompleted.push(this.phraseCount));
+  }
+
+  changeToContinueButton() {
     this.button.removeClass('hidden');
     this.hints.toggleTextHint();
     this.hints.toggleAudioHint();
@@ -196,12 +211,28 @@ class Game extends Component {
           item.classList.add('solid');
         });
       this.information.removeClass('hidden');
+      this.resultButton.removeClass('hidden');
     }
   }
 
   continueGame() {
     this.indexesArray = [];
-    this.setPhraseCount(++this.phraseCount);
+    if (this.phraseCount === 9) {
+      this.phraseCount = 0;
+      if (this.round === data[this.level].rounds.length) {
+        this.level++;
+        this.round = 0;
+      } else {
+        this.round++;
+      }
+      this.setRound(this.round);
+      this.setLevel(this.level);
+      this.clear();
+      this.render();
+    } else {
+      this.phraseCount++;
+    }
+    this.setPhraseCount(this.phraseCount);
     this.renderSentence();
     this.button.toggleClass('hidden');
   }
