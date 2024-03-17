@@ -1,6 +1,7 @@
 import Component from '../../basic-components/component';
-import { div, h3 } from '../../basic-components/tags';
+import { div, h3, span } from '../../basic-components/tags';
 import data from '../../data/data';
+import { BASE_URL } from '../game-page/hints';
 
 class Results extends Component {
   constructor() {
@@ -15,9 +16,15 @@ class Results extends Component {
     const unknownBlock = div('results__block', h3('results__block__title', "I don't know"));
     const knownBlock = div('results__block', h3('results__block__title', 'I know'));
     const phrases = data[level].rounds[round].words;
+    const audio = new Audio();
     phrases.forEach((phrase, index) => {
-      const phraseDiv = div('');
-      phraseDiv.changeText(phrase.textExample);
+      const icon = span('', '🔊');
+      icon.setListener('click', () => {
+        audio.pause();
+        audio.src = `${BASE_URL}${data[level].rounds[round].words[index].audioExample}`;
+        audio.play();
+      });
+      const phraseDiv = div('', icon, span('', phrase.textExample));
       if (index in autocompletedIndexes) {
         unknownBlock.appendChildren(phraseDiv);
       } else {
