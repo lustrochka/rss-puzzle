@@ -1,17 +1,21 @@
 import Component from '../../basic-components/component';
 import { div, h3, span, img, p } from '../../basic-components/tags';
+import Button from '../../basic-components/button';
 import data from '../../data/data';
 import { BASE_URL } from '../game-page/hints';
 
 class Results extends Component {
-  constructor() {
+  onClick;
+
+  constructor(onClick: () => void) {
     super('div', 'results');
+    this.onClick = onClick;
     this.render();
   }
 
   render() {
-    const level = Number(localStorage.getItem('level')) || 1;
-    const round = Number(localStorage.getItem('round')) || 0;
+    let level = Number(localStorage.getItem('level')) || 1;
+    let round = Number(localStorage.getItem('round')) || 0;
     const imgData = data[level].rounds[round].levelData;
     const autocompletedIndexes = JSON.parse(localStorage.getItem('autocompleted') || '[]');
     const unknownBlock = div('results__block', h3('results__block__title', "I don't know"));
@@ -32,11 +36,24 @@ class Results extends Component {
         knownBlock.appendChildren(phraseDiv);
       }
     });
+    const continueButton = new Button('results__button button', 'Continue', {}, () => {
+      localStorage.setItem('phraseCount', '0');
+      if (round === data[level].rounds.length) {
+        level++;
+        round = 0;
+      } else {
+        round++;
+      }
+      localStorage.setItem('round', `${round}`);
+      localStorage.setItem('level', `${level}`);
+    });
+    continueButton.setListener('click', this.onClick);
     this.appendChildren(
       img('results__image', `${BASE_URL}images/${data[level].rounds[round].levelData.cutSrc}`),
       p('results__info', `${imgData.author} - ${imgData.name} (${imgData.year})`),
       unknownBlock,
-      knownBlock
+      knownBlock,
+      new Button('results__button button', 'Continue', {}, this.onClick)
     );
   }
 }

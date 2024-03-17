@@ -21,7 +21,7 @@ class App extends Component {
 
   renderResults() {
     this.main.clear();
-    this.main.appendChildren(new Results());
+    this.main.appendChildren(new Results(() => this.renderGame()));
   }
 
   render() {
