@@ -19,6 +19,8 @@ class Game extends Component {
 
   field;
 
+  information;
+
   wordsBlock;
 
   row;
@@ -48,6 +50,7 @@ class Game extends Component {
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
     this.field = div('game__field');
+    this.information = div('game__info hidden');
     this.wordsBlock = div('game__words');
     this.button = new Button('button hidden', 'Check', { type: 'button' });
     this.indexesArray = [];
@@ -66,7 +69,9 @@ class Game extends Component {
     this.wordsBlock.clear();
     this.wordsBlock = div('game__words', this.wordsRow);
     this.hints = new Hints();
-    this.appendChildren(this.hints, this.menu, this.field, this.wordsBlock, this.button);
+    const imgData = data[this.level].rounds[this.round].levelData;
+    this.information.changeText(`${imgData.author} - ${imgData.name} (${imgData.year})`);
+    this.appendChildren(this.hints, this.menu, this.field, this.information, this.wordsBlock, this.button);
     this.renderSentence();
   }
 
@@ -148,6 +153,21 @@ class Game extends Component {
       this.button.changeText('Continue');
       this.button.removeListener('click', this.bindedCheckRow);
       this.button.setListener('click', this.bindedContinueGame);
+      if (this.phraseCount === 9) {
+        this.field
+          .getNode()
+          .querySelectorAll('.game__words__item')
+          .forEach((item) => {
+            item.classList.add('solid');
+          });
+        this.field
+          .getNode()
+          .querySelectorAll('.game__field__row')
+          .forEach((item) => {
+            item.classList.add('solid');
+          });
+        this.information.removeClass('hidden');
+      }
     } else {
       this.button.changeText('Check');
       this.button.removeListener('click', this.bindedContinueGame);

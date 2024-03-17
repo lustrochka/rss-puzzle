@@ -85,13 +85,18 @@
 
 .game__field {
   height: 525px;
+  margin-bottom: 10px;
 }
 
 .game__field,
 .game__words {
-  background-color: grey;
-  width: 700px;
+  background-color: #cfcdcd;
+  width: 720px;
   position: relative;
+}
+
+.game__words {
+  text-align: center;
 }
 
 .game__words__item {
@@ -100,11 +105,15 @@
   text-align: center;
   transition: 0.2s;
   height: inherit;
+  margin-right: 1px;
   div {
     height: 100%;
   }
   div:first-child {
     mask-image: radial-gradient(circle at left, transparent 10px, black 10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   div:nth-child(2) {
     position: absolute;
@@ -115,9 +124,17 @@
   }
 }
 
+.game__words__item:last-child {
+  margin-right: 0;
+}
+
 .game__words__row,
 .game__field__row {
   display: inline-block;
+}
+
+.game__field__row {
+  margin-bottom: 2px;
 }
 
 .incorrect {
@@ -149,5 +166,12 @@
     #wave3 {
       animation: third-wave linear 1.5s infinite;
     }
+  }
+}
+
+.solid {
+  margin: 0;
+  span {
+    visibility: hidden;
   }
 }

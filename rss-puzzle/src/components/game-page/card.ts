@@ -1,5 +1,5 @@
 import Component from '../../basic-components/component';
-import { div } from '../../basic-components/tags';
+import { div, span } from '../../basic-components/tags';
 
 class Card extends Component {
   #index;
@@ -44,8 +44,7 @@ class Card extends Component {
   }
 
   renderLeftDiv() {
-    const leftDiv = div('');
-    leftDiv.changeText(this.sentence[this.#index]);
+    const leftDiv = div('', span('game__field__item-text', this.sentence[this.#index]));
     leftDiv.setStyle('width', `${this.width}px`);
     leftDiv.setStyle('background-image', `url(${this.imgUrl})`);
     leftDiv.setStyle('background-position', `left -${this.leftPosition}px top -${this.phraseCount * this.height}px`);
