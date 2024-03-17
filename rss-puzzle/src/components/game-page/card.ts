@@ -37,7 +37,8 @@ class Card extends Component {
     this.leftPosition = this.sentence.slice(0, this.#index).join('').length * this.letterWidth;
     this.imgUrl = imgUrl;
     this.height = height;
-    this.width = this.letterWidth * this.sentence[this.#index].length;
+    const length = this.sentence[this.#index].length > 1 ? this.sentence[this.#index].length : 2;
+    this.width = this.letterWidth * length;
     this.setListener('click', onClick);
     this.appendChildren(this.renderLeftDiv());
     if (this.#index !== this.sentence.length - 1) this.appendChildren(this.renderRightDiv());

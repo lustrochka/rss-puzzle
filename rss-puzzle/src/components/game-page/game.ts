@@ -71,7 +71,20 @@ class Game extends Component {
     this.hints = new Hints();
     const imgData = data[this.level].rounds[this.round].levelData;
     this.information.changeText(`${imgData.author} - ${imgData.name} (${imgData.year})`);
-    this.appendChildren(this.hints, this.menu, this.field, this.information, this.wordsBlock, this.button);
+    this.appendChildren(
+      this.hints,
+      this.menu,
+      this.field,
+      this.information,
+      this.wordsBlock,
+      this.button,
+      new Button('button autocomplete-button', "I don't know", { type: 'button' }, () => {
+        this.row.getNode().remove();
+        this.renderSentence(false);
+        this.wordsRow.clear();
+        this.changeToCintinueButton();
+      })
+    );
     this.renderSentence();
   }
 
@@ -122,7 +135,7 @@ class Game extends Component {
     if (this.indexesArray.length === this.sentence.length) this.setButton();
   }
 
-  renderSentence() {
+  renderSentence(random = true) {
     this.sentence = data[this.level].rounds[this.round].words[this.phraseCount].textExample.split(' ');
     this.row = div('game__field__row');
     const height = 530 / data[this.level].rounds[this.round].words.length;
@@ -140,38 +153,49 @@ class Game extends Component {
       );
       cardsArray.push(card);
     });
-    this.randomize(cardsArray).forEach((card) => {
-      this.wordsRow.appendChildren(card);
-    });
+    if (random) {
+      this.randomize(cardsArray).forEach((card) => {
+        this.wordsRow.appendChildren(card);
+      });
+    } else {
+      cardsArray.forEach((card) => {
+        this.row.appendChildren(card);
+      });
+    }
   }
 
   setButton() {
-    this.button.removeClass('hidden');
     if (this.indexesArray.every((item, index) => item === index)) {
-      this.hints.toggleTextHint();
-      this.hints.toggleAudioHint();
-      this.button.changeText('Continue');
-      this.button.removeListener('click', this.bindedCheckRow);
-      this.button.setListener('click', this.bindedContinueGame);
-      if (this.phraseCount === 9) {
-        this.field
-          .getNode()
-          .querySelectorAll('.game__words__item')
-          .forEach((item) => {
-            item.classList.add('solid');
-          });
-        this.field
-          .getNode()
-          .querySelectorAll('.game__field__row')
-          .forEach((item) => {
-            item.classList.add('solid');
-          });
-        this.information.removeClass('hidden');
-      }
+      this.changeToCintinueButton();
     } else {
+      this.button.removeClass('hidden');
       this.button.changeText('Check');
       this.button.removeListener('click', this.bindedContinueGame);
       this.button.setListener('click', this.bindedCheckRow);
+    }
+  }
+
+  changeToCintinueButton() {
+    this.button.removeClass('hidden');
+    this.hints.toggleTextHint();
+    this.hints.toggleAudioHint();
+    this.button.changeText('Continue');
+    this.button.removeListener('click', this.bindedCheckRow);
+    this.button.setListener('click', this.bindedContinueGame);
+    if (this.phraseCount === 9) {
+      this.field
+        .getNode()
+        .querySelectorAll('.game__words__item')
+        .forEach((item) => {
+          item.classList.add('solid');
+        });
+      this.field
+        .getNode()
+        .querySelectorAll('.game__field__row')
+        .forEach((item) => {
+          item.classList.add('solid');
+        });
+      this.information.removeClass('hidden');
     }
   }
 
