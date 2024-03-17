@@ -19,3 +19,9 @@ export const h1 = (className: string, text: string, ...children: Component[]) =>
   element.changeText(text);
   return element;
 };
+
+export const h3 = (className: string, text: string, ...children: Component[]) => {
+  const element = new Component('h1', className, ...children);
+  element.changeText(text);
+  return element;
+};

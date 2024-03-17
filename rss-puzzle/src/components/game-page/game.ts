@@ -187,7 +187,8 @@ class Game extends Component {
     this.wordsRow.clear();
     this.changeToContinueButton();
     const autocompleted = JSON.parse(localStorage.getItem('autocompleted') || '[]');
-    JSON.stringify(autocompleted.push(this.phraseCount));
+    autocompleted.push(this.phraseCount);
+    localStorage.setItem('autocompleted', JSON.stringify(autocompleted));
   }
 
   changeToContinueButton() {
