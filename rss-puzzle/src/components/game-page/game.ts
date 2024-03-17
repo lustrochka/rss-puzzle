@@ -3,14 +3,19 @@ import Card from './card';
 import Button from '../../basic-components/button';
 import Hints, { BASE_URL } from './hints';
 import { div } from '../../basic-components/tags';
-import data from '../../data/wordCollectionLevel1.json';
+import data from '../../data/data';
+import Menu from './menu';
 
 class Game extends Component {
+  level;
+
   round;
 
   phraseCount;
 
   hints;
+
+  menu;
 
   field;
 
@@ -32,21 +37,37 @@ class Game extends Component {
 
   constructor() {
     super('div', 'game-page');
+    this.level = 1;
     this.round = 0;
     this.phraseCount = 0;
     this.hints = new Hints();
+    this.menu = new Menu(() => {
+      this.clear();
+      this.render();
+    });
     this.row = div('game__field__row');
     this.wordsRow = div('game__words__row');
-    this.wordsRow.setStyle('height', `${530 / data.rounds[this.round].words.length}px`);
     this.field = div('game__field');
-    this.wordsBlock = div('game__words', this.wordsRow);
+    this.wordsBlock = div('game__words');
     this.button = new Button('button hidden', 'Check', { type: 'button' });
-    this.appendChildren(this.hints, this.field, this.wordsBlock, this.button);
     this.indexesArray = [];
     this.sentence = [];
-    this.renderSentence();
     this.bindedContinueGame = this.continueGame.bind(this);
     this.bindedCheckRow = this.checkRow.bind(this);
+    this.render();
+  }
+
+  render() {
+    if (localStorage.getItem('level')) this.level = Number(localStorage.getItem('level'));
+    if (localStorage.getItem('round')) this.round = Number(localStorage.getItem('round'));
+    this.wordsRow.setStyle('height', `${530 / data[this.level].rounds[this.round].words.length}px`);
+    this.wordsRow.clear();
+    this.field.clear();
+    this.wordsBlock.clear();
+    this.wordsBlock = div('game__words', this.wordsRow);
+    this.hints = new Hints();
+    this.appendChildren(this.hints, this.menu, this.field, this.wordsBlock, this.button);
+    this.renderSentence();
   }
 
   randomize(array: Card[]) {
@@ -97,9 +118,9 @@ class Game extends Component {
   }
 
   renderSentence() {
-    this.sentence = data.rounds[this.round].words[this.phraseCount].textExample.split(' ');
+    this.sentence = data[this.level].rounds[this.round].words[this.phraseCount].textExample.split(' ');
     this.row = div('game__field__row');
-    const height = 530 / data.rounds[this.round].words.length;
+    const height = 530 / data[this.level].rounds[this.round].words.length;
     this.field.appendChildren(this.row);
     this.row.setStyle('height', `${height}px`);
     const cardsArray: Card[] = [];
@@ -108,7 +129,7 @@ class Game extends Component {
         index,
         this.sentence,
         this.phraseCount,
-        `${BASE_URL}images/${data.rounds[this.round].levelData.imageSrc}`,
+        `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`,
         height,
         () => this.moveWord(card)
       );

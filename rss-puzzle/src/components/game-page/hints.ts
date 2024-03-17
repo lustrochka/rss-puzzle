@@ -2,7 +2,7 @@ import Component from '../../basic-components/component';
 import { div } from '../../basic-components/tags';
 import Button from '../../basic-components/button';
 import svg from '../../data/sound';
-import data from '../../data/wordCollectionLevel1.json';
+import data from '../../data/data';
 
 export const BASE_URL = 'https://raw.githubusercontent.com/rolling-scopes-school/rss-puzzle-data/main/';
 
@@ -34,6 +34,10 @@ class Hints extends Component {
     this.appendChildren(this.#audioHintButton, this.#audioHint, this.#textHintButton, this.#textHint);
   }
 
+  getLevel() {
+    return Number(localStorage.getItem('level')) || 0;
+  }
+
   getRound() {
     return Number(localStorage.getItem('round')) || 0;
   }
@@ -47,7 +51,9 @@ class Hints extends Component {
     hint.getNode().innerHTML = svg;
     hint.setListener('click', () => {
       hint.addClass('animated');
-      const audio = new Audio(`${BASE_URL}${data.rounds[this.getRound()].words[this.getPhraseCount()].audioExample}`);
+      const audio = new Audio(
+        `${BASE_URL}${data[this.getLevel()].rounds[this.getRound()].words[this.getPhraseCount()].audioExample}`
+      );
       audio.play();
       audio.addEventListener('pause', () => {
         hint.removeClass('animated');
@@ -60,7 +66,9 @@ class Hints extends Component {
     if (change) this.#isTextHintShown = !this.#isTextHintShown;
     if (this.#isTextHintShown) {
       this.#textHintButton.changeText('Hide translation');
-      this.#textHint.changeText(`${data.rounds[this.getRound()].words[this.getPhraseCount()].textExampleTranslate}`);
+      this.#textHint.changeText(
+        `${data[this.getLevel()].rounds[this.getRound()].words[this.getPhraseCount()].textExampleTranslate}`
+      );
     } else {
       this.#textHintButton.changeText('Show translation');
       this.#textHint.changeText('');
