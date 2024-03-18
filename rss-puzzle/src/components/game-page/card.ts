@@ -18,16 +18,7 @@ class Card extends Component {
 
   width;
 
-  height;
-
-  constructor(
-    index: number,
-    sentence: string[],
-    phraseCount: number,
-    imgUrl: string,
-    height: number,
-    onClick: () => void
-  ) {
+  constructor(index: number, sentence: string[], phraseCount: number, imgUrl: string, onClick: () => void) {
     super('div', 'game__words__item');
     this.#index = index;
     this.sentence = sentence;
@@ -36,9 +27,7 @@ class Card extends Component {
     this.phraseCount = phraseCount;
     this.leftPosition = this.sentence.slice(0, this.#index).join('').length * this.letterWidth;
     this.imgUrl = imgUrl;
-    this.height = height;
-    const length = this.sentence[this.#index].length > 1 ? this.sentence[this.#index].length : 2;
-    this.width = this.letterWidth * length;
+    this.width = this.letterWidth * this.sentence[this.#index].length;
     this.setListener('click', onClick);
     this.appendChildren(this.renderLeftDiv());
     if (this.#index !== this.sentence.length - 1) this.appendChildren(this.renderRightDiv());
@@ -48,7 +37,7 @@ class Card extends Component {
     const leftDiv = div('', span('game__field__item-text', this.sentence[this.#index]));
     leftDiv.setStyle('width', `${this.width}px`);
     leftDiv.setStyle('background-image', `url(${this.imgUrl})`);
-    leftDiv.setStyle('background-position', `left -${this.leftPosition}px top -${this.phraseCount * this.height}px`);
+    leftDiv.setStyle('background-position', `left -${this.leftPosition}px top -${this.phraseCount * 53}px`);
     if (this.#index === 0) leftDiv.setStyle('mask-image', 'none');
     return leftDiv;
   }
@@ -58,7 +47,7 @@ class Card extends Component {
     rightDiv.setStyle('background-image', `url(${this.imgUrl})`);
     rightDiv.setStyle(
       'background-position',
-      `left ${-this.leftPosition - this.width}px top -${this.phraseCount * this.height}px`
+      `left ${-this.leftPosition - this.width}px top -${this.phraseCount * 53}px`
     );
     return rightDiv;
   }

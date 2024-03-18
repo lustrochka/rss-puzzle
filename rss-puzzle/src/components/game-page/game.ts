@@ -144,9 +144,7 @@ class Game extends Component {
   renderSentence(random = true) {
     this.sentence = data[this.level].rounds[this.round].words[this.phraseCount].textExample.split(' ');
     this.row = div('game__field__row');
-    const height = 530 / data[this.level].rounds[this.round].words.length;
     this.field.appendChildren(this.row);
-    this.row.setStyle('height', `${height}px`);
     const cardsArray: Card[] = [];
     this.sentence.forEach((word, index) => {
       const card: Card = new Card(
@@ -154,7 +152,6 @@ class Game extends Component {
         this.sentence,
         this.phraseCount,
         `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`,
-        height,
         () => this.moveWord(card)
       );
       cardsArray.push(card);
@@ -202,12 +199,6 @@ class Game extends Component {
       this.field
         .getNode()
         .querySelectorAll('.game__words__item')
-        .forEach((item) => {
-          item.classList.add('solid');
-        });
-      this.field
-        .getNode()
-        .querySelectorAll('.game__field__row')
         .forEach((item) => {
           item.classList.add('solid');
         });
