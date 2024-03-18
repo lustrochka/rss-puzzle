@@ -25,13 +25,16 @@ class Hints extends Component {
     if (localStorage.getItem('text-hint')) this.#isTextHintShown = localStorage.getItem('text-hint') === 'true';
     this.#isAudioHintShown = true;
     if (localStorage.getItem('audio-hint')) this.#isAudioHintShown = localStorage.getItem('audio-hint') === 'true';
-    this.#textHintButton = new Button('hints__text-hint-button', 'Hide translation', {}, () => this.toggleTextHint());
-    this.#audioHintButton = new Button('hints__audio-hint-button', 'Hide audio', {}, () => this.toggleAudioHint());
-    this.#textHint = div('hints__text-hint');
+    this.#textHintButton = new Button('hints__button', 'Hide translation', {}, () => this.toggleTextHint());
+    this.#audioHintButton = new Button('hints__button', 'Hide audio', {}, () => this.toggleAudioHint());
+    this.#textHint = div('hints__hint-content');
     this.#audioHint = this.renderAudioHint();
     this.toggleAudioHint(false);
     this.toggleTextHint(false);
-    this.appendChildren(this.#audioHintButton, this.#audioHint, this.#textHintButton, this.#textHint);
+    this.appendChildren(
+      div('hints__hint', this.#audioHintButton, this.#audioHint),
+      div('hints__hint', this.#textHintButton, this.#textHint)
+    );
   }
 
   getLevel() {
@@ -47,7 +50,7 @@ class Hints extends Component {
   }
 
   renderAudioHint() {
-    const hint = div('hints__audio-hint');
+    const hint = div('hints__hint-content');
     hint.getNode().innerHTML = svg;
     hint.setListener('click', () => {
       hint.addClass('animated');
@@ -76,7 +79,7 @@ class Hints extends Component {
     localStorage.setItem('text-hint', `${this.#isTextHintShown}`);
   }
 
-  toggleAudioHint(change = true) {
+  toggleAudioHint(change = true, save = true) {
     if (change) this.#isAudioHintShown = !this.#isAudioHintShown;
     if (this.#isAudioHintShown) {
       this.#audioHintButton.changeText('Hide audio');
@@ -85,7 +88,16 @@ class Hints extends Component {
       this.#audioHintButton.changeText('Show audio');
       this.#audioHint.addClass('hidden');
     }
-    localStorage.setItem('audio-hint', `${this.#isAudioHintShown}`);
+    if (save) localStorage.setItem('audio-hint', `${this.#isAudioHintShown}`);
+  }
+
+  showHints() {
+    this.#textHintButton.changeText('Hide translation');
+    this.#textHint.changeText(
+      `${data[this.getLevel()].rounds[this.getRound()].words[this.getPhraseCount()].textExampleTranslate}`
+    );
+    this.#audioHintButton.changeText('Hide audio');
+    this.#audioHint.removeClass('hidden');
   }
 }
 
