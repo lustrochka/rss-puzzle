@@ -40,10 +40,13 @@ class LoginForm extends Component<HTMLFormElement> {
         name: 'name',
         required: 'true',
         pattern: '[A-Z]{1}[a-zA-Z\\-]{2,}',
+        placeholder: 'John',
       },
       () => {
         this.nameMsg.changeText(checkValidity(this.nameInput.getValue(), 3));
-        if (this.checkFormValidity()) this.submitButton.deleteAttribute('disabled');
+        if (this.checkFormValidity()) {
+          this.submitButton.deleteAttribute('disabled');
+        } else this.submitButton.addAttributes({ disabled: 'true' });
       }
     );
     this.surnameInput = new Input(
@@ -54,10 +57,13 @@ class LoginForm extends Component<HTMLFormElement> {
         name: 'surname',
         required: 'true',
         pattern: '[A-Z]{1}[a-zA-Z\\-]{3,}',
+        placeholder: 'Doee',
       },
       () => {
         this.surnameMsg.changeText(checkValidity(this.surnameInput.getValue(), 4));
-        if (this.checkFormValidity()) this.submitButton.deleteAttribute('disabled');
+        if (this.checkFormValidity()) {
+          this.submitButton.deleteAttribute('disabled');
+        } else this.submitButton.addAttributes({ disabled: 'true' });
       }
     );
     super.appendChildren(
