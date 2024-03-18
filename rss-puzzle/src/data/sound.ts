@@ -13,7 +13,7 @@ const html = `<svg
   <defs
      id="defs1" />
     <rect
-       style="fill:#000000;fill-opacity:1;stroke-width:1.96608;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:1.96608;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
        id="rect1"
        width="52.749031"
        height="49.691116"
@@ -22,7 +22,7 @@ const html = `<svg
        ry="0.20310362" />
     <path
        sodipodi:type="star"
-       style="fill:#000000;fill-opacity:1;stroke-width:2.495;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:2.495;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
        id="path1"
        inkscape:flatsided="true"
        sodipodi:sides="3"
@@ -39,8 +39,8 @@ const html = `<svg
        inkscape:transform-center-y="-0.090710058"
        transform="matrix(0.76983721,0,0,0.87833045,7.2538981,67.881083)" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:7.495;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="wave2"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:7.495;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       class="wave2"
        sodipodi:type="arc"
        sodipodi:cx="102.24902"
        sodipodi:cy="153.85135"
@@ -52,8 +52,8 @@ const html = `<svg
        sodipodi:arc-type="arc"
        d="m 127.049,118.8816 a 43.384171,42.61969 0 0 1 18.58185,35.41242 43.384171,42.61969 0 0 1 -19.32661,35.0256" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:6.795;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="wave1"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:6.795;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       class="wave1"
        sodipodi:type="arc"
        sodipodi:cx="89.588913"
        sodipodi:cy="156.41628"
@@ -65,8 +65,8 @@ const html = `<svg
        sodipodi:arc-type="arc"
        d="m 105.84849,132.72135 a 28.443911,28.878391 0 0 1 12.1828,23.99487 28.443911,28.878391 0 0 1 -12.67109,23.73276" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:7.524;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="wave3"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:7.524;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       class="wave3"
        sodipodi:type="arc"
        sodipodi:cx="117.28026"
        sodipodi:cy="153.16127"

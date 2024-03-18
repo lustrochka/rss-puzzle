@@ -35,7 +35,7 @@ class Hints extends Component {
   }
 
   getLevel() {
-    return Number(localStorage.getItem('level')) || 0;
+    return Number(localStorage.getItem('level')) || 1;
   }
 
   getRound() {
