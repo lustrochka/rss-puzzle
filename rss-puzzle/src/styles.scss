@@ -138,6 +138,10 @@ body {
   font-style: italic;
 }
 
+.game {
+  margin-top: -80px;
+}
+
 .game__field {
   height: 525px;
   margin-bottom: 10px;
@@ -198,10 +202,6 @@ body {
 
 .hidden {
   display: none;
-}
-
-.hints__text-hint {
-  text-align: center;
 }
 
 .wave1,
@@ -281,4 +281,39 @@ body {
   display: flex;
   align-items: center;
   font-size: 14px;
+}
+
+.hints {
+  display: flex;
+  gap: 20px;
+  height: 40px;
+}
+
+.hints__hint {
+  display: flex;
+  align-items: center;
+}
+
+.hints__button {
+  height: 25px;
+  margin-right: 10px;
+  background-color: #c17cfa;
+  border-radius: 5px;
+}
+
+.hints__button:hover {
+  cursor: pointer;
+  background-color: #9c7cfa;
+}
+
+@media (max-width: 770px) {
+  .hints {
+    gap: 10px;
+  }
+  .hints__hint-content {
+    font-size: 14px;
+    svg {
+      width: 25px;
+    }
+  }
 }

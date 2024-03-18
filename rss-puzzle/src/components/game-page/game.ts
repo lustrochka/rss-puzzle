@@ -40,7 +40,7 @@ class Game extends Component {
   bindedCheckRow;
 
   constructor(onClickResults: () => void) {
-    super('div', 'game-page');
+    super('div', 'game');
     this.level = 1;
     this.round = 0;
     this.phraseCount = 0;
@@ -186,6 +186,7 @@ class Game extends Component {
     this.renderSentence(false);
     this.wordsRow.clear();
     this.changeToContinueButton();
+    this.hints.showHints();
     const autocompleted = JSON.parse(localStorage.getItem('autocompleted') || '[]');
     autocompleted.push(this.phraseCount);
     localStorage.setItem('autocompleted', JSON.stringify(autocompleted));
@@ -193,8 +194,7 @@ class Game extends Component {
 
   changeToContinueButton() {
     this.button.removeClass('hidden');
-    this.hints.toggleTextHint();
-    this.hints.toggleAudioHint();
+    this.hints.showHints();
     this.button.changeText('Continue');
     this.button.removeListener('click', this.bindedCheckRow);
     this.button.setListener('click', this.bindedContinueGame);
@@ -235,6 +235,8 @@ class Game extends Component {
     }
     this.setPhraseCount(this.phraseCount);
     this.renderSentence();
+    this.hints.toggleAudioHint(false);
+    this.hints.toggleTextHint(false);
     this.button.toggleClass('hidden');
   }
 
