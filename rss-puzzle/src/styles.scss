@@ -43,10 +43,10 @@ body {
 }
 
 .main {
+  min-height: 100vh;
   color: white;
   background-image: url(./data/bg2.jpg);
   background-size: cover;
-  height: 100vh;
   padding-top: 100px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -204,21 +204,21 @@ body {
   text-align: center;
 }
 
-#wave1,
-#wave2,
-#wave3 {
+.wave1,
+.wave2,
+.wave3 {
   visibility: hidden;
 }
 
 .animated {
   svg {
-    #wave1 {
+    .wave1 {
       animation: first-wave linear 1.5s infinite;
     }
-    #wave2 {
+    .wave2 {
       animation: second-wave linear 1.5s infinite;
     }
-    #wave3 {
+    .wave3 {
       animation: third-wave linear 1.5s infinite;
     }
   }
@@ -231,6 +231,54 @@ body {
   }
 }
 
+.results {
+  max-width: 500px;
+  margin: -60px auto;
+}
+
 .results__image {
   width: 150px;
+  margin-left: 20px;
+}
+
+.results__button {
+  margin: 50px 20px;
+}
+
+.results__info {
+  font-size: 12px;
+}
+
+.results__block__title {
+  font-size: 20px;
+}
+
+.unknown {
+  color: #f8185a;
+}
+
+.known {
+  color: #f5b078;
+}
+
+.results__audio-icon {
+  display: inline-block;
+  margin-right: 10px;
+  svg {
+    width: 25px;
+  }
+}
+
+.results__audio-icon:hover {
+  .wave1,
+  .wave2,
+  .wave3 {
+    visibility: visible;
+  }
+}
+
+.results__block__item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
 }

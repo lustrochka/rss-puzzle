@@ -2,6 +2,7 @@ import Component from '../../basic-components/component';
 import { div, h3, span, img, p } from '../../basic-components/tags';
 import Button from '../../basic-components/button';
 import data from '../../data/data';
+import svg from '../../data/sound';
 import { BASE_URL } from '../game-page/hints';
 
 class Results extends Component {
@@ -18,18 +19,19 @@ class Results extends Component {
     let round = Number(localStorage.getItem('round')) || 0;
     const imgData = data[level].rounds[round].levelData;
     const autocompletedIndexes = JSON.parse(localStorage.getItem('autocompleted') || '[]');
-    const unknownBlock = div('results__block', h3('results__block__title', "I don't know"));
-    const knownBlock = div('results__block', h3('results__block__title', 'I know'));
+    const unknownBlock = div('results__block', h3('results__block__title unknown', "I don't know"));
+    const knownBlock = div('results__block', h3('results__block__title known', 'I know'));
     const phrases = data[level].rounds[round].words;
     const audio = new Audio();
     phrases.forEach((phrase, index) => {
-      const icon = span('', '🔊');
+      const icon = div('results__audio-icon');
+      icon.getNode().innerHTML = svg;
       icon.setListener('click', () => {
         audio.pause();
         audio.src = `${BASE_URL}${data[level].rounds[round].words[index].audioExample}`;
         audio.play();
       });
-      const phraseDiv = div('', icon, span('', phrase.textExample));
+      const phraseDiv = div('results__block__item', icon, span('', phrase.textExample));
       if (index in autocompletedIndexes) {
         unknownBlock.appendChildren(phraseDiv);
       } else {
