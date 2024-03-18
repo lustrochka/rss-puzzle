@@ -38,6 +38,18 @@
   }
 }
 
+body {
+  margin: 0;
+}
+
+.main {
+  color: white;
+  background-color: #3b3b3b;
+  height: 100vh;
+  padding-top: 100px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 .header {
   text-align: right;
 }
@@ -47,31 +59,54 @@
 }
 
 .login-form {
+  background-color: #302f2f;
   display: flex;
   flex-direction: column;
   width: 300px;
   text-align: center;
+  padding: 20px 20px 35px;
+  margin: 0 auto;
+}
+
+.button:disabled {
+  background-color: #f5b078;
 }
 
 .button {
   margin: 15px auto 0;
   width: 150px;
   height: 30px;
-  background-color: #f5b078;
+  background-color: #f59378;
   border: none;
   border-radius: 5px;
+}
+
+.button:hover {
+  cursor: pointer;
+  box-shadow:
+    0 0 0 3px #302f2f,
+    0 0 0 4px #f59378;
 }
 .login-form__label {
   margin-top: 15px;
   font-weight: 700;
 }
 
-.login-form__input:invalid {
-  border: 1px solid #fc0054;
+.login-form__input {
+  background-color: #1d1c1c;
+  border-radius: 5px;
+  height: 30px;
+  margin-top: 10px;
+  color: #909090;
+}
+
+.login-form__input:not(:placeholder-shown):invalid {
+  border: 1px solid #f8185a;
 }
 
 .login-form__message {
-  color: #fc0054;
+  color: #f8185a;
+  margin-top: 5px;
 }
 
 .start-page {

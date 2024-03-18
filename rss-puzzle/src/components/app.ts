@@ -6,7 +6,7 @@ import Game from './game-page/game';
 import Results from './results/results';
 
 class App extends Component {
-  main = new Component('main', 'main');
+  main;
 
   constructor() {
     super('div', 'app');
@@ -26,6 +26,7 @@ class App extends Component {
 
   render() {
     this.clear();
+    this.main.clear();
     const form = new LoginForm(() => {
       const data = new FormData(form.getNode());
       localStorage.setItem('name', String(data.get('name')));
