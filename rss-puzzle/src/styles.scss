@@ -150,7 +150,7 @@ body {
 .game__field,
 .game__words {
   background-color: #cfcdcd;
-  width: 720px;
+  width: 700px;
   position: relative;
 }
 
@@ -164,7 +164,10 @@ body {
   text-align: center;
   transition: 0.2s;
   height: inherit;
-  margin-right: 1px;
+  filter: drop-shadow(4px 0 6px black);
+  span {
+    text-shadow: 2px 2px 3px black;
+  }
   div {
     height: 100%;
   }
@@ -190,10 +193,7 @@ body {
 .game__words__row,
 .game__field__row {
   display: inline-block;
-}
-
-.game__field__row {
-  margin-bottom: 2px;
+  height: 53px;
 }
 
 .incorrect {
@@ -225,7 +225,7 @@ body {
 }
 
 .solid {
-  margin: 0;
+  filter: none;
   span {
     visibility: hidden;
   }
