@@ -80,11 +80,14 @@ class Game extends Component {
       this.field,
       this.information,
       this.wordsBlock,
-      this.button,
-      new Button('button autocomplete-button', "I don't know", { type: 'button' }, () => {
-        this.showRightOrder();
-      }),
-      this.resultButton
+      div(
+        'game__buttons',
+        this.button,
+        new Button('button autocomplete-button', "I don't know", { type: 'button' }, () => {
+          this.showRightOrder();
+        }),
+        this.resultButton
+      )
     );
     this.renderSentence();
   }
@@ -221,11 +224,12 @@ class Game extends Component {
       this.setLevel(this.level);
       this.clear();
       this.render();
+      this.resultButton.addClass('hidden');
     } else {
       this.phraseCount++;
+      this.renderSentence();
     }
     this.setPhraseCount(this.phraseCount);
-    this.renderSentence();
     this.hints.toggleAudioHint(false);
     this.hints.toggleTextHint(false);
     this.button.toggleClass('hidden');
