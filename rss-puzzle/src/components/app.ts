@@ -47,4 +47,6 @@ class App extends Component {
   }
 }
 
+window.addEventListener('unload', () => localStorage.removeItem('phraseCount'));
+
 export default App;

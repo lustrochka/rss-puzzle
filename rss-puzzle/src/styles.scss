@@ -152,7 +152,7 @@ body {
 
 .game__field,
 .game__words {
-  background-color: #6c6b6b;
+  background-color: #414141;
   width: 700px;
   position: relative;
 }
@@ -325,6 +325,10 @@ body {
 .hints__button:hover {
   cursor: pointer;
   background-color: #9c7cfa;
+}
+
+.completed {
+  background-color: #f8185a;
 }
 
 @media (max-width: 770px) {
