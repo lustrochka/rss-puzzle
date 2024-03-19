@@ -1,4 +1,4 @@
-import Select from '../../basic-components/select';
+import Select from './select';
 import Label from '../../basic-components/label';
 import Component from '../../basic-components/component';
 import data from '../../data/data';
@@ -9,6 +9,8 @@ class Menu extends Component {
   round;
 
   onChange;
+
+  levelSelect;
 
   roundSelect;
 
@@ -22,17 +24,17 @@ class Menu extends Component {
       localStorage.setItem('round', `${this.round}`);
     });
     this.roundSelect.setListener('change', onChange);
-    const select = new Select('menu__select', 6, { id: 'level-select' }, () => {
-      this.level = Number(select.getValue());
+    this.levelSelect = new Select('menu__select', 6, { id: 'level-select' }, () => {
+      this.level = Number(this.levelSelect.getValue());
       localStorage.setItem('level', `${this.level}`);
       this.replaceRoundSelect();
       this.round = 0;
       localStorage.setItem('round', `${this.round}`);
     });
-    select.setListener('change', onChange);
+    this.levelSelect.setListener('change', onChange);
     this.appendChildren(
       new Label('menu__label', 'Select level:', { for: 'level-select' }),
-      select,
+      this.levelSelect,
       new Label('menu__label', 'Select round:', { for: 'round-select' }),
       this.roundSelect
     );
@@ -47,6 +49,21 @@ class Menu extends Component {
     this.roundSelect.destroy();
     this.appendChildren(select);
     this.roundSelect = select;
+  }
+
+  changeSelects() {
+    this.level = Number(localStorage.getItem('level')) || 1;
+    const select = new Select('menu__select', 6, { id: 'level-select' }, () => {
+      this.level = Number(this.levelSelect.getValue());
+      localStorage.setItem('level', `${this.level}`);
+      this.replaceRoundSelect();
+      this.round = 0;
+      localStorage.setItem('round', `${this.round}`);
+    });
+    select.setListener('change', this.onChange);
+    this.replaceChild(select, this.levelSelect);
+    this.levelSelect = select;
+    this.replaceRoundSelect();
   }
 }
 

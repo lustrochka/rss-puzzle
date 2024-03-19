@@ -16,7 +16,7 @@ class Select extends Component<HTMLSelectElement> {
         if (i === level) option.addAttributes({ selected: 'true' });
       } else {
         if (i - 1 === round) option.addAttributes({ selected: 'true' });
-        if (level in completed && i - 1 in completed[level]) option.addClass('completed');
+        if (level in completed && completed[level].includes(i)) option.addClass('completed');
       }
       this.appendChildren(option);
     }

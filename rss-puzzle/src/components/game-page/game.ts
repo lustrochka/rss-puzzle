@@ -46,6 +46,7 @@ class Game extends Component {
     this.phraseCount = 0;
     this.hints = new Hints();
     this.menu = new Menu(() => {
+      localStorage.setItem('phraseCount', '0');
       this.clear();
       this.render();
     });
@@ -193,6 +194,7 @@ class Game extends Component {
   }
 
   changeToContinueButton() {
+    if (this.phraseCount === 9) this.saveCompletedRound();
     this.button.removeClass('hidden');
     this.hints.showHints();
     this.button.changeText('Continue');
@@ -233,6 +235,17 @@ class Game extends Component {
     this.hints.toggleAudioHint(false);
     this.hints.toggleTextHint(false);
     this.button.toggleClass('hidden');
+    this.menu.changeSelects();
+  }
+
+  saveCompletedRound() {
+    const completed = JSON.parse(localStorage.getItem('completed') || '{}');
+    if (this.level in completed) {
+      completed[this.level].push(this.round);
+    } else {
+      completed[this.level] = [this.round];
+    }
+    localStorage.setItem('completed', JSON.stringify(completed));
   }
 
   checkRow() {
