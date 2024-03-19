@@ -27,9 +27,9 @@ class Menu extends Component {
     this.levelSelect = new Select('menu__select', 6, { id: 'level-select' }, () => {
       this.level = Number(this.levelSelect.getValue());
       localStorage.setItem('level', `${this.level}`);
-      this.replaceRoundSelect();
       this.round = 0;
       localStorage.setItem('round', `${this.round}`);
+      this.replaceRoundSelect();
     });
     this.levelSelect.setListener('change', onChange);
     this.appendChildren(
