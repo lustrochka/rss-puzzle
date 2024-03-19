@@ -6,6 +6,8 @@ class Card extends Component {
 
   wholeLength;
 
+  height;
+
   letterWidth;
 
   phraseCount;
@@ -18,36 +20,48 @@ class Card extends Component {
 
   width;
 
-  constructor(index: number, sentence: string[], phraseCount: number, imgUrl: string, onClick: () => void) {
+  constructor(
+    index: number,
+    sentence: string[],
+    phraseCount: number,
+    imgUrl: string,
+    wholeHeight: number,
+    wholeWidth: number,
+    onClick: () => void
+  ) {
     super('div', 'game__words__item');
     this.#index = index;
     this.sentence = sentence;
     this.wholeLength = sentence.join('').length;
-    this.letterWidth = 700 / this.wholeLength;
+    this.height = wholeHeight / 10;
+    this.letterWidth = wholeWidth / this.wholeLength;
     this.phraseCount = phraseCount;
     this.leftPosition = this.sentence.slice(0, this.#index).join('').length * this.letterWidth;
     this.imgUrl = imgUrl;
     this.width = this.letterWidth * this.sentence[this.#index].length;
+    this.addAttributes({ id: `${phraseCount} ${index}` });
     this.setListener('click', onClick);
     this.appendChildren(this.renderLeftDiv());
     if (this.#index !== this.sentence.length - 1) this.appendChildren(this.renderRightDiv());
   }
 
   renderLeftDiv() {
-    const leftDiv = div('', span('game__field__item-text', this.sentence[this.#index]));
+    const itemText = span('card__text', this.sentence[this.#index]);
+    if (this.sentence[this.#index].length === 1) itemText.setStyle('transform', 'translateX(5px)');
+    const leftDiv = div('card__left-element', itemText);
     leftDiv.setStyle('width', `${this.width}px`);
     leftDiv.setStyle('background-image', `url(${this.imgUrl})`);
-    leftDiv.setStyle('background-position', `left -${this.leftPosition}px top -${this.phraseCount * 53}px`);
+    leftDiv.setStyle('background-position', `left -${this.leftPosition}px top -${this.phraseCount * this.height}px`);
     if (this.#index === 0) leftDiv.setStyle('mask-image', 'none');
     return leftDiv;
   }
 
   renderRightDiv() {
-    const rightDiv = div('');
+    const rightDiv = div('card__right-element');
     rightDiv.setStyle('background-image', `url(${this.imgUrl})`);
     rightDiv.setStyle(
       'background-position',
-      `left ${-this.leftPosition - this.width}px top -${this.phraseCount * 53}px`
+      `left ${-this.leftPosition - this.width}px top -${this.phraseCount * this.height}px`
     );
     return rightDiv;
   }

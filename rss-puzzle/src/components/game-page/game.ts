@@ -13,6 +13,8 @@ class Game extends Component {
 
   phraseCount;
 
+  height;
+
   hints;
 
   menu;
@@ -44,6 +46,7 @@ class Game extends Component {
     this.level = 1;
     this.round = 0;
     this.phraseCount = 0;
+    this.height = 0;
     this.hints = new Hints();
     this.menu = new Menu(() => {
       localStorage.setItem('phraseCount', '0');
@@ -62,18 +65,26 @@ class Game extends Component {
     this.bindedContinueGame = this.continueGame.bind(this);
     this.bindedCheckRow = this.checkRow.bind(this);
     this.render();
+    this.onResize();
   }
 
   render() {
     if (localStorage.getItem('level')) this.level = Number(localStorage.getItem('level'));
     if (localStorage.getItem('round')) this.round = Number(localStorage.getItem('round'));
-    this.wordsRow.setStyle('height', `${530 / data[this.level].rounds[this.round].words.length}px`);
     this.wordsRow.clear();
     this.field.clear();
     this.wordsBlock.clear();
     this.wordsBlock = div('game__words', this.wordsRow);
     this.hints = new Hints();
     const imgData = data[this.level].rounds[this.round].levelData;
+    const img = new Image();
+    img.src = `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`;
+    img.onload = () => {
+      this.height = img.height * (this.field.getNode().offsetWidth / img.width);
+      this.wordsRow.setStyle('height', `${this.height / 10}px`);
+      this.field.setStyle('height', `${this.height}px`);
+      this.renderSentence();
+    };
     this.information.changeText(`${imgData.author} - ${imgData.name} (${imgData.year})`);
     this.appendChildren(
       this.hints,
@@ -90,7 +101,6 @@ class Game extends Component {
         this.resultButton
       )
     );
-    this.renderSentence();
   }
 
   randomize(array: Card[]) {
@@ -123,11 +133,11 @@ class Game extends Component {
     let height: number;
     if (child.getNode().parentElement?.className === 'game__words__row') {
       target = this.row;
-      height = -500 + this.row.getNode().offsetTop;
+      height = -this.height + this.row.getNode().offsetTop;
       this.indexesArray.push(child.getIndex());
     } else {
       target = this.wordsRow;
-      height = 500 - this.row.getNode().offsetTop;
+      height = this.height - this.row.getNode().offsetTop;
       this.indexesArray.splice(this.indexesArray.indexOf(child.getIndex()), 1);
     }
     child.setStyle(
@@ -148,6 +158,7 @@ class Game extends Component {
   renderSentence(random = true) {
     this.sentence = data[this.level].rounds[this.round].words[this.phraseCount].textExample.split(' ');
     this.row = div('game__field__row');
+    this.row.setStyle('height', `${this.height / 10}px`);
     this.field.appendChildren(this.row);
     const cardsArray: Card[] = [];
     this.sentence.forEach((word, index) => {
@@ -156,6 +167,8 @@ class Game extends Component {
         this.sentence,
         this.phraseCount,
         `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`,
+        this.height,
+        this.field.getNode().offsetWidth,
         () => this.moveWord(card)
       );
       cardsArray.push(card);
@@ -254,6 +267,37 @@ class Game extends Component {
     for (let i = 0; i < cards.length; i++) {
       if (!checkArray[i]) cards[i].classList.add('incorrect');
     }
+  }
+
+  onResize() {
+    const windowWidth = window.matchMedia('(max-width: 850px)');
+    windowWidth.addEventListener('change', (event) => {
+      const cards = document.querySelectorAll('.game__words__item');
+      if (event.matches) {
+        this.height *= 0.8125;
+      } else {
+        this.height /= 0.8125;
+      }
+      this.wordsRow.setStyle('height', `${this.height / 10}px`);
+      this.field.setStyle('height', `${this.height}px`);
+      this.field
+        .getNode()
+        .querySelectorAll<HTMLElement>('.game__field__row')
+        .forEach((el) => el.style.setProperty('height', `${this.height / 10}px`));
+      cards.forEach((card) => {
+        const phraseCount = Number(card.id.slice(0, 1));
+        const newCard: Card = new Card(
+          Number(card.id.slice(2)),
+          data[this.level].rounds[this.round].words[phraseCount].textExample.split(' '),
+          phraseCount,
+          `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`,
+          this.height,
+          this.field.getNode().offsetWidth,
+          () => this.moveWord(newCard)
+        );
+        card.replaceWith(newCard.getNode());
+      });
+    });
   }
 }
 
