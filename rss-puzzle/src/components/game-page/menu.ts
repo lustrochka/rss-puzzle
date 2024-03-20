@@ -22,6 +22,7 @@ class Menu extends Component {
     this.roundSelect = new Select('menu__select', data[this.level].rounds.length, { id: 'round-select' }, () => {
       this.round = Number(this.roundSelect.getValue()) - 1;
       localStorage.setItem('round', `${this.round}`);
+      localStorage.removeItem('autocompleted');
     });
     this.roundSelect.setListener('change', onChange);
     this.levelSelect = new Select('menu__select', 6, { id: 'level-select' }, () => {
@@ -30,6 +31,7 @@ class Menu extends Component {
       this.round = 0;
       localStorage.setItem('round', `${this.round}`);
       this.replaceRoundSelect();
+      localStorage.removeItem('autocompleted');
     });
     this.levelSelect.setListener('change', onChange);
     this.appendChildren(
@@ -44,6 +46,7 @@ class Menu extends Component {
     const select = new Select('menu__select', data[this.level].rounds.length, { id: 'round-select' }, () => {
       this.round = Number(this.roundSelect.getValue()) - 1;
       localStorage.setItem('round', `${this.round}`);
+      localStorage.removeItem('autocompleted');
     });
     select.setListener('change', this.onChange);
     this.roundSelect.destroy();
@@ -59,6 +62,7 @@ class Menu extends Component {
       this.replaceRoundSelect();
       this.round = 0;
       localStorage.setItem('round', `${this.round}`);
+      localStorage.removeItem('autocompleted');
     });
     select.setListener('change', this.onChange);
     this.replaceChild(select, this.levelSelect);

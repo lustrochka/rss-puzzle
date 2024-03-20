@@ -47,6 +47,9 @@ class App extends Component {
   }
 }
 
-window.addEventListener('unload', () => localStorage.removeItem('phraseCount'));
+window.addEventListener('unload', () => {
+  localStorage.removeItem('phraseCount');
+  localStorage.removeItem('autocompleted');
+});
 
 export default App;
