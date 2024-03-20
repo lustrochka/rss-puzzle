@@ -37,6 +37,8 @@ class Game extends Component {
 
   resultButton;
 
+  autocompleteButton;
+
   bindedContinueGame;
 
   bindedCheckRow;
@@ -60,6 +62,9 @@ class Game extends Component {
     this.wordsBlock = div('game__words');
     this.button = new Button('button hidden', 'Check', { type: 'button' });
     this.resultButton = new Button('button hidden', 'Results', { type: 'button' }, onClickResults);
+    this.autocompleteButton = new Button('button autocomplete-button', "I don't know", { type: 'button' }, () => {
+      this.showRightOrder();
+    });
     this.indexesArray = [];
     this.sentence = [];
     this.bindedContinueGame = this.continueGame.bind(this);
@@ -92,14 +97,7 @@ class Game extends Component {
       this.field,
       this.information,
       this.wordsBlock,
-      div(
-        'game__buttons',
-        this.button,
-        new Button('button autocomplete-button', "I don't know", { type: 'button' }, () => {
-          this.showRightOrder();
-        }),
-        this.resultButton
-      )
+      div('game__buttons', this.button, this.autocompleteButton, this.resultButton)
     );
   }
 
@@ -204,6 +202,7 @@ class Game extends Component {
     const autocompleted = JSON.parse(localStorage.getItem('autocompleted') || '[]');
     autocompleted.push(this.phraseCount);
     localStorage.setItem('autocompleted', JSON.stringify(autocompleted));
+    this.autocompleteButton.addClass('hidden');
   }
 
   changeToContinueButton() {
@@ -230,7 +229,7 @@ class Game extends Component {
     if (this.phraseCount === 9) {
       this.phraseCount = 0;
       if (this.round === data[this.level].rounds.length) {
-        this.level++;
+        this.level = this.level === 6 ? 1 : this.level + 1;
         this.round = 0;
       } else {
         this.round++;
@@ -240,9 +239,11 @@ class Game extends Component {
       this.clear();
       this.render();
       this.resultButton.addClass('hidden');
+      localStorage.removeItem('autocompleted');
     } else {
       this.phraseCount++;
       this.renderSentence();
+      this.autocompleteButton.removeClass('hidden');
     }
     this.setPhraseCount(this.phraseCount);
     this.hints.toggleAudioHint(false);

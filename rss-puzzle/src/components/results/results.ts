@@ -32,7 +32,7 @@ class Results extends Component {
         audio.play();
       });
       const phraseDiv = div('results__block__item', icon, span('', phrase.textExample));
-      if (index in autocompletedIndexes) {
+      if (autocompletedIndexes.includes(index)) {
         unknownBlock.appendChildren(phraseDiv);
       } else {
         knownBlock.appendChildren(phraseDiv);
@@ -41,13 +41,14 @@ class Results extends Component {
     const continueButton = new Button('results__button button', 'Continue', {}, () => {
       localStorage.setItem('phraseCount', '0');
       if (round === data[level].rounds.length) {
-        level++;
+        level = level === 6 ? 1 : level + 1;
         round = 0;
       } else {
         round++;
       }
       localStorage.setItem('round', `${round}`);
       localStorage.setItem('level', `${level}`);
+      localStorage.removeItem('autocompleted');
     });
     continueButton.setListener('click', this.onClick);
     this.appendChildren(
@@ -55,7 +56,7 @@ class Results extends Component {
       p('results__info', `${imgData.author} - ${imgData.name} (${imgData.year})`),
       unknownBlock,
       knownBlock,
-      new Button('results__button button', 'Continue', {}, this.onClick)
+      continueButton
     );
   }
 }
