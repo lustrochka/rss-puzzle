@@ -27,7 +27,8 @@ class Card extends Component {
     imgUrl: string,
     wholeHeight: number,
     wholeWidth: number,
-    onClick: () => void
+    onClick: () => void,
+    onMouseDown: () => void
   ) {
     super('div', 'game__words__item');
     this.#index = index;
@@ -40,7 +41,9 @@ class Card extends Component {
     this.imgUrl = imgUrl;
     this.width = this.letterWidth * this.sentence[this.#index].length;
     this.addAttributes({ id: `${phraseCount} ${index}` });
-    this.setListener('click', onClick);
+    this.setStyle('height', `${this.height}px`);
+    this.getNode().onclick = onClick;
+    this.getNode().onmousedown = onMouseDown;
     this.appendChildren(this.renderLeftDiv());
     if (this.#index !== this.sentence.length - 1) this.appendChildren(this.renderRightDiv());
   }

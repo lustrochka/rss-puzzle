@@ -43,6 +43,8 @@ class Game extends Component {
 
   bindedCheckRow;
 
+  isDragging;
+
   constructor(onClickResults: () => void) {
     super('div', 'game');
     this.level = 1;
@@ -71,6 +73,7 @@ class Game extends Component {
     this.bindedCheckRow = this.checkRow.bind(this);
     this.render();
     this.onResize();
+    this.isDragging = false;
   }
 
   render() {
@@ -99,6 +102,7 @@ class Game extends Component {
       this.wordsBlock,
       div('game__buttons', this.button, this.autocompleteButton, this.resultButton)
     );
+    this.autocompleteButton.removeClass('hidden');
   }
 
   randomize(array: Card[]) {
@@ -126,31 +130,82 @@ class Game extends Component {
     localStorage.setItem('level', `${this.level}`);
   }
 
+  dragWord(child: Card) {
+    let target: Component;
+    let targetClass: string;
+    let parent: Component;
+    if (child.getNode().parentElement?.className === 'game__words__row') {
+      target = this.row;
+      parent = this.wordsRow;
+      targetClass = '.game__field';
+    } else {
+      parent = this.row;
+      target = this.wordsRow;
+      targetClass = '.game__words';
+    }
+    let elemBelow: Element | null;
+    document.onmousemove = (e) => {
+      this.isDragging = true;
+      child.setStyle('position', 'absolute');
+      child.setStyle('z-index', '10');
+      document.body.append(child.getNode());
+      child.setStyle('left', `${e.pageX - child.getNode().offsetWidth / 2}px`);
+      child.setStyle('top', `${e.pageY - child.getNode().offsetHeight / 2}px`);
+      child.addClass('hidden');
+      elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+      child.removeClass('hidden');
+    };
+    child.getNode().onmouseup = () => {
+      if (this.isDragging) {
+        child.setStyle('position', 'static');
+        child.setStyle('z-index', 'auto');
+        if (
+          parent === this.row &&
+          elemBelow?.closest('.game__field__row') &&
+          elemBelow?.closest('.game__words__item') &&
+          Number(elemBelow?.closest('.game__words__item')?.id.slice(0, 1)) === this.phraseCount
+        ) {
+          const element = elemBelow.closest('.game__words__item');
+          element?.insertAdjacentElement('afterend', child.getNode());
+        } else if (elemBelow?.closest(`${targetClass}`)) {
+          target.appendChildren(child);
+        } else {
+          parent.appendChildren(child);
+        }
+        this.isDragging = false;
+      }
+      child.getNode().onmouseup = null;
+      document.onmousemove = null;
+    };
+  }
+
   moveWord(child: Card) {
     let target: Component;
     let height: number;
-    if (child.getNode().parentElement?.className === 'game__words__row') {
-      target = this.row;
-      height = -this.height + this.row.getNode().offsetTop;
-      this.indexesArray.push(child.getIndex());
-    } else {
-      target = this.wordsRow;
-      height = this.height - this.row.getNode().offsetTop;
-      this.indexesArray.splice(this.indexesArray.indexOf(child.getIndex()), 1);
+    if (!this.isDragging) {
+      if (child.getNode().parentElement?.className === 'game__words__row') {
+        target = this.row;
+        height = -this.height + this.row.getNode().offsetTop;
+        this.indexesArray.push(child.getIndex());
+      } else {
+        target = this.wordsRow;
+        height = this.height - this.row.getNode().offsetTop;
+        this.indexesArray.splice(this.indexesArray.indexOf(child.getIndex()), 1);
+      }
+      child.setStyle(
+        'transform',
+        `translate(${-(child.getNode().offsetLeft - target.getNode().offsetWidth)}px, ${height}px)`
+      );
+      setTimeout(() => {
+        child.setStyle('transition', '0s');
+        child.setStyle('transform', 'translate(0, 0)');
+        target.appendChildren(child);
+        child.setStyle('transition', '0.2s');
+      }, 200);
+      for (let i = 0; i < this.row.getNode().children.length; i++)
+        this.row.getNode().children[i].classList.remove('incorrect');
+      if (this.indexesArray.length === this.sentence.length) this.setButton();
     }
-    child.setStyle(
-      'transform',
-      `translate(${-(child.getNode().offsetLeft - target.getNode().offsetWidth)}px, ${height}px)`
-    );
-    setTimeout(() => {
-      child.setStyle('transition', '0s');
-      child.setStyle('transform', 'translate(0, 0)');
-      target.appendChildren(child);
-      child.setStyle('transition', '0.2s');
-    }, 200);
-    for (let i = 0; i < this.row.getNode().children.length; i++)
-      this.row.getNode().children[i].classList.remove('incorrect');
-    if (this.indexesArray.length === this.sentence.length) this.setButton();
   }
 
   renderSentence(random = true) {
@@ -167,7 +222,8 @@ class Game extends Component {
         `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`,
         this.height,
         this.field.getNode().offsetWidth,
-        () => this.moveWord(card)
+        () => this.moveWord(card),
+        () => this.dragWord(card)
       );
       cardsArray.push(card);
     });
@@ -226,6 +282,13 @@ class Game extends Component {
 
   continueGame() {
     this.indexesArray = [];
+    const cards = this.row.getNode().children;
+    for (const card of cards) {
+      if (card instanceof HTMLElement) {
+        card.onclick = null;
+        card.onmousedown = null;
+      }
+    }
     if (this.phraseCount === 9) {
       this.phraseCount = 0;
       if (this.round === data[this.level].rounds.length) {
@@ -255,9 +318,9 @@ class Game extends Component {
   saveCompletedRound() {
     const completed = JSON.parse(localStorage.getItem('completed') || '{}');
     if (this.level in completed) {
-      completed[this.level].push(this.round);
+      completed[this.level].push(this.round + 1);
     } else {
-      completed[this.level] = [this.round];
+      completed[this.level] = [this.round + 1];
     }
     localStorage.setItem('completed', JSON.stringify(completed));
   }
@@ -294,7 +357,8 @@ class Game extends Component {
           `${BASE_URL}images/${data[this.level].rounds[this.round].levelData.imageSrc}`,
           this.height,
           this.field.getNode().offsetWidth,
-          () => this.moveWord(newCard)
+          () => this.moveWord(newCard),
+          () => this.dragWord(newCard)
         );
         card.replaceWith(newCard.getNode());
       });
