@@ -12,27 +12,27 @@ function checkValidity(value: string, length: number) {
 }
 
 class LoginForm extends Component<HTMLFormElement> {
-  nameInput;
+  #nameInput;
 
-  surnameInput;
+  #surnameInput;
 
-  nameMsg;
+  #nameMsg;
 
-  surnameMsg;
+  #surnameMsg;
 
-  submitButton;
+  #submitButton;
 
   constructor(onSubmit: () => void) {
     super('form', 'login-form');
-    this.nameMsg = span('login-form__message', '');
-    this.surnameMsg = span('login-form__message', '');
-    this.submitButton = new Button(
+    this.#nameMsg = span('login-form__message', '');
+    this.#surnameMsg = span('login-form__message', '');
+    this.#submitButton = new Button(
       'login-form__button button',
       'Login',
       { type: 'button', disabled: 'true' },
       onSubmit
     );
-    this.nameInput = new Input(
+    this.#nameInput = new Input(
       'login-form__input',
       {
         id: 'first-name',
@@ -43,13 +43,13 @@ class LoginForm extends Component<HTMLFormElement> {
         placeholder: 'John',
       },
       () => {
-        this.nameMsg.changeText(checkValidity(this.nameInput.getValue(), 3));
+        this.#nameMsg.changeText(checkValidity(this.#nameInput.getValue(), 3));
         if (this.checkFormValidity()) {
-          this.submitButton.deleteAttribute('disabled');
-        } else this.submitButton.addAttributes({ disabled: 'true' });
+          this.#submitButton.deleteAttribute('disabled');
+        } else this.#submitButton.addAttributes({ disabled: 'true' });
       }
     );
-    this.surnameInput = new Input(
+    this.#surnameInput = new Input(
       'login-form__input',
       {
         id: 'first-name',
@@ -60,20 +60,20 @@ class LoginForm extends Component<HTMLFormElement> {
         placeholder: 'Doee',
       },
       () => {
-        this.surnameMsg.changeText(checkValidity(this.surnameInput.getValue(), 4));
+        this.#surnameMsg.changeText(checkValidity(this.#surnameInput.getValue(), 4));
         if (this.checkFormValidity()) {
-          this.submitButton.deleteAttribute('disabled');
-        } else this.submitButton.addAttributes({ disabled: 'true' });
+          this.#submitButton.deleteAttribute('disabled');
+        } else this.#submitButton.addAttributes({ disabled: 'true' });
       }
     );
     super.appendChildren(
       new Label('login-form__label', 'First Name', { for: 'first-name' }),
-      this.nameInput,
-      this.nameMsg,
+      this.#nameInput,
+      this.#nameMsg,
       new Label('login-form__label', 'Surname', { for: 'surname' }),
-      this.surnameInput,
-      this.surnameMsg,
-      this.submitButton
+      this.#surnameInput,
+      this.#surnameMsg,
+      this.#submitButton
     );
     this.setListener('submit', (e: Event) => e.preventDefault());
   }
