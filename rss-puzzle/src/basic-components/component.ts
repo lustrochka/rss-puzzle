@@ -6,9 +6,7 @@ class Component<T extends HTMLElement = HTMLElement> {
   constructor(tag: string, className: string, ...children: Component[]) {
     this.#node = document.createElement(tag) as T;
     this.#node.className = className;
-    if (children) {
-      children.forEach((child) => this.#node.append(child.getNode()));
-    }
+    children?.forEach((child) => this.#node.append(child.getNode()));
   }
 
   addClass(className: string) {
