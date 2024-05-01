@@ -1,4 +1,2 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/husky.sh"
-cd rss-puzzle
-npx validate-branch-name
+. "${0%/*}/h"

@@ -77,8 +77,6 @@ class Game extends Component {
   }
 
   render() {
-    if (localStorage.getItem('level')) this.level = Number(localStorage.getItem('level'));
-    if (localStorage.getItem('round')) this.round = Number(localStorage.getItem('round'));
     this.wordsRow.clear();
     this.field.clear();
     this.wordsBlock.clear();
@@ -167,7 +165,7 @@ class Game extends Component {
         ) {
           const element = elemBelow.closest('.game__words__item');
           element?.insertAdjacentElement('afterend', child.getNode());
-        } else if (elemBelow?.closest(`${targetClass}`)) {
+        } else if (elemBelow?.closest(targetClass)) {
           target.appendChildren(child);
         } else {
           parent.appendChildren(child);
