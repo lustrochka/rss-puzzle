@@ -1,18 +1,18 @@
-## RSS-PUZZLE
+## 🧩 RSS-PUZZLE
 
 An interactive game that helps improve English skills by assembling sentences from jumbled words. Inspired by Lingualeo's Phrase Constructor
 
-## DEPLOYMENT
+## 🚀 Deployment
 
 [Deploy](https://extraordinary-lollipop-38ad5e.netlify.app)
 
-## Technology Stack
+## 🧱 Technology Stack
 
 ![SCSS](https://img.shields.io/badge/SCSS-hotpink?style=for-the-badge&logo=sass&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Webpack](https://img.shields.io/badge/Webpack-3CB371?style=for-the-badge&logo=webpack&logoColor=1E90FF)
 
-## Application Structure
+## 🏗️ Application Structure
 
 ### Core Components:
 - **User Name Input** — stored in LocalStorage for personalized access  
@@ -27,7 +27,7 @@ An interactive game that helps improve English skills by assembling sentences fr
 - **Artwork Puzzle** — each correctly assembled sentence reveals a piece of the artwork  
 - **Progress & Results** — view performance stats and progress after each round  
 
-## Run locally
+## 🔧 Installation and Setup
 
 1. Clone the repository
 
